@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PestApp", "PestApp\PestApp.csproj", "{746F5C2E-EE69-440A-A9F8-133478B18C5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PestApp", "PestApp\PestApp.csproj", "{746F5C2E-EE69-440A-A9F8-133478B18C5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLibrary", "DataLibrary\DataLibrary.csproj", "{F5FEBCA8-9E8A-4F2D-B46A-2F33E159F56D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{746F5C2E-EE69-440A-A9F8-133478B18C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{746F5C2E-EE69-440A-A9F8-133478B18C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{746F5C2E-EE69-440A-A9F8-133478B18C5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5FEBCA8-9E8A-4F2D-B46A-2F33E159F56D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5FEBCA8-9E8A-4F2D-B46A-2F33E159F56D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5FEBCA8-9E8A-4F2D-B46A-2F33E159F56D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5FEBCA8-9E8A-4F2D-B46A-2F33E159F56D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
