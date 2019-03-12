@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="00152fce-fc61-4a5d-9501-0b2463930a9c" ChangeDateTime="03/11/2019 10:01:19">
+    <Property Name="ElementName" Value="[dbo].[User].[Password]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[User]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Email" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="16289958-8a01-4e16-b997-ca1e1aea1943" ChangeDateTime="03/12/2019 13:20:09">
+    <Property Name="ElementName" Value="[dbo].[User].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[User]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UserId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="60b933f2-7176-421d-a60d-a92609971d65" ChangeDateTime="03/12/2019 13:20:20">
+    <Property Name="ElementName" Value="[dbo].[RuleSet].[PlayerId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[RuleSet]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UserId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e1220110-5ec7-4532-a426-a46044ae2219" ChangeDateTime="03/12/2019 13:25:41">
+    <Property Name="ElementName" Value="[dbo].[User].[UserId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[User]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Id" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ef40ddf7-9f87-4a05-af53-5e31fc9a48e3" ChangeDateTime="03/12/2019 13:30:08">
+    <Property Name="ElementName" Value="[dbo].[Rule_RuleSet].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Rule_RuleSet]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RuleSetId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4c36594a-99a0-4bff-b282-4cf5945deb53" ChangeDateTime="03/12/2019 13:36:26">
+    <Property Name="ElementName" Value="[dbo].[AdditionalRule_RuleSet].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AdditionalRule_RuleSet]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RuleSetId" />
+  </Operation>
+</Operations>

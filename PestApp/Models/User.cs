@@ -8,8 +8,6 @@ namespace PestApp.Models
 {
     public class User
     {
-        public string Id { get; set; }
-
         [Display(Name = "E-mail Address")]
         [DataType(DataType.EmailAddress)]
         [Required(ErrorMessage = "This field is required")]
