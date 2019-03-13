@@ -11,19 +11,14 @@ namespace PestApp.Models
     }
     public class Rule
     {
-        private int _id;
-        public int Id { get { return _id; } }
-        private Card _card;
-        public Card Card { get { return _card; } }
-        private int _ruleAmount;
-        public int RuleAmount { get { return _ruleAmount; } }
-        private ruleType _ruleType;
-        public ruleType RuleType {  get { return _ruleType; } }
+        public Card Card { get; set; }
+        public int RuleAmount { get; set; }
+        public ruleType RuleType { get; set; }
         public Rule (Card card, ruleType ruletype, int ruleAmount)
         {
-            _card = card;
-            _ruleType = ruletype;
-            _ruleAmount = ruleAmount;
+            Card = card;
+            RuleType = ruletype;
+            RuleAmount = ruleAmount;
         }
     }
 }

@@ -15,18 +15,27 @@ namespace PestApp.Models
     }
     public class Card
     {
-        private cardFace _face;
-        private cardSuit _suit;
-        public cardFace Face { get { return _face; } }
-        public cardSuit Suit { get { return _suit; } }
+        public cardFace Face { get; set; }
+        public cardSuit Suit { get; set; }
         public Card (cardFace face, cardSuit suit)
         {
-            _face = face;
-            _suit = suit;
+            Face = face;
+            Suit = suit;
         }
         public Card ()
         {
-            _face = cardFace.Jo;
+            Face = cardFace.Jo;
+        }
+        public override string ToString()
+        {
+            if (Face != cardFace.Jo)
+            {
+                return Suit.ToString().Substring(0, 1) + Face.ToString().Substring(Face.ToString().Length - 1, 1);
+            }
+            else
+            {
+                return Face.ToString();
+            }
         }
     }
 }
