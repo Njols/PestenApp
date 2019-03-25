@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PestApp.Models;
+using DataLibrary;
+using DataLibrary.BusinessLogic;
 
 namespace PestApp.Controllers
 {
@@ -38,6 +40,32 @@ namespace PestApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public IActionResult SignUp ()
+        {
+            ViewData["Message"] = "Sign up for our app";
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SignUp (User user)
+        {
+            if (ModelState.IsValid)
+            {
+                UserProcessor.CreateUser(user.Email, user.Username, user.Password);
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+        public IActionResult ViewUsers ()
+        {
+            var data = UserProcessor.GetUsers();
+            List<User> users = new List<User>();
+            foreach (var user in data)
+            {
+                users.Add(new User { Email = user.Email, Username = user.Username });
+            }
+            return View(users);
         }
     }
 }

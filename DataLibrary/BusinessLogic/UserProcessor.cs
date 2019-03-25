@@ -3,6 +3,7 @@ using DataLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Dapper;
 
 namespace DataLibrary.BusinessLogic
 {
@@ -16,12 +17,13 @@ namespace DataLibrary.BusinessLogic
                 Username = Username,
                 Password = Password
             };
-            string sql = @"INSERT INTO dbo.User (Email, Username, Password) VALUES @Email, @Username, @Password";
+            string sql = @"INSERT INTO [User] (Email, Username, Password) 
+                           VALUES (@Email, @Username, @Password)";
             return SqlDataAcces.SaveData(sql, user);
         }
         public static List<User> GetUsers ()
         {
-            string sql = @"SELECT Id, Username, Email, Password FROM dbo.User";
+            string sql = @"SELECT Id, Username, Email, Password FROM [User]";
             return SqlDataAcces.LoadData<User>(sql);
         }
     }
