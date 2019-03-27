@@ -67,5 +67,9 @@ namespace PestApp.Controllers
             }
             return View(users);
         }
+        public IActionResult CreateRuleSet()
+        {
+            return View();
+        }
     }
 }

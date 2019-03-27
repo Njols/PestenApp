@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewData["Title"] = "CreateRuleSet";
+}
+
+<div class="form-group">
+    <select class="form-control" id="sel1">
+        @foreach(string item in Enum.GetNames(typeof(cardSuit)))
+        {
+            foreach (string Item in Enum.GetNames(typeof(cardFace)).Where(w => w != "Joker"))
+            {
+                var cardString = Item + " of " + item;
+                <option value=@cardString>@cardString</option>
+            }
+        }
+    </select>
+</div>
+

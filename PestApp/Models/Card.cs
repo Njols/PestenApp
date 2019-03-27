@@ -7,7 +7,7 @@ namespace PestApp.Models
 {
     public enum cardFace
     {
-        A,a2,a3,a4,a5,a6,a7,a8,a9,a10,Ja,Q,K,Jo
+        Ace,Two,Three,Four,Five,Six,Seven,Eight,Nine,Ten,Jack,Queen,King,Joker
     }
     public enum cardSuit
     {
@@ -24,11 +24,11 @@ namespace PestApp.Models
         }
         public Card ()
         {
-            Face = cardFace.Jo;
+            Face = cardFace.Joker;
         }
         public override string ToString()
         {
-            if (Face != cardFace.Jo)
+            if (Face != cardFace.Joker)
             {
                 return Suit.ToString().Substring(0, 1) + Face.ToString().Substring(Face.ToString().Length - 1, 1);
             }
