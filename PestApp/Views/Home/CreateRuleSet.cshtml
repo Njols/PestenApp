@@ -14,5 +14,11 @@
             }
         }
     </select>
+    <select class="form-control" id="sel2">
+        @foreach(string item in Enum.GetNames(typeof(ruleType)))
+        {
+            <option value=@item>@item</option>
+        }
+    </select>
 </div>
 
