@@ -2,23 +2,25 @@
 @{
     ViewData["Title"] = "CreateRuleSet";
 }
-
-<div class="form-group">
-    <select class="form-control" id="sel1">
-        @foreach(string item in Enum.GetNames(typeof(cardSuit)))
-        {
-            foreach (string Item in Enum.GetNames(typeof(cardFace)).Where(w => w != "Joker"))
+<div class="select-container" id="select-container">
+    <div class="form-group">
+        <select  id="card-selection">
+            @foreach(string item in Enum.GetNames(typeof(cardSuit)))
             {
-                var cardString = Item + " of " + item;
-                <option value=@cardString>@cardString</option>
+                foreach (string Item in Enum.GetNames(typeof(cardFace)).Where(w => w != "Joker"))
+                {
+                    var cardString = Item + " of " + item;
+                    <option value=@cardString>@cardString</option>
+             }
+         }
+         </select>
+         <select id="rule-selection">
+            @foreach(string item in Enum.GetNames(typeof(ruleType)))
+            {
+                <option value=@item>@item</option>
             }
-        }
-    </select>
-    <select class="form-control" id="sel2">
-        @foreach(string item in Enum.GetNames(typeof(ruleType)))
-        {
-            <option value=@item>@item</option>
-        }
-    </select>
+        </select>
+        <input id="addRuleButton" type="button" value="Add Rule"/>
+    </div>
 </div>
 

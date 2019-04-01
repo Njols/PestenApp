@@ -1,8 +1,10 @@
 ﻿body {
 }
-#sel1 {
-    width: auto;
+.card-selection {
+    display: inline-block;
+    width: 25%;
 }
-#sel2 {
-    width: auto;
+.rule-selection {
+    display: inline-block;
+    width:25%;
 }
