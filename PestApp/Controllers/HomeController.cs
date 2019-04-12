@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using PestApp.Models;
 using DataLibrary;
 using DataLibrary.BusinessLogic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using DataLibrary.DataAccess;
 
 namespace PestApp.Controllers
 {
@@ -67,9 +69,20 @@ namespace PestApp.Controllers
             }
             return View(users);
         }
+        [HttpPost]
+        public IActionResult CreateRuleSet(RuleViewModel ruleViewModel)
+        {
+            ruleViewModel.ExistingRules.Add(new Rule(new Card(ruleViewModel.CardFace, ruleViewModel.CardSuit), ruleViewModel.CardRule, 0));
+            return View(ruleViewModel);
+        }
         public IActionResult CreateRuleSet()
         {
-            return View();
+            ViewBag.CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
+            ViewBag.CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
+            ViewBag.CardRule = new SelectList(Enum.GetNames(typeof(ruleType)));
+            RuleViewModel ruleViewModel = new RuleViewModel();
+            ruleViewModel.ExistingRules = new List<Rule>();
+            return View(ruleViewModel);
         }
     }
 }

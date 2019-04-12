@@ -1,13 +1,11 @@
-﻿using System;
+﻿using Dapper;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
-using Dapper;
 
 namespace DataLibrary.DataAccess
 {
-    public static class SqlDataAcces
+    public static class SqlDataAccess
     {
         public static string ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PestDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         public static List<T> LoadData<T>(string query)

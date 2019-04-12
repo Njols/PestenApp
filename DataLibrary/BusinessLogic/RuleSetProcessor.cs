@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataLibrary.BusinessLogic
 {
-    class RuleSetProcessor
+    public static class RuleSetProcessor
     {
     }
 }

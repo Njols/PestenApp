@@ -1,26 +1,25 @@
-﻿
+﻿@model RuleViewModel
 @{
     ViewData["Title"] = "CreateRuleSet";
 }
-<div class="select-container" id="select-container">
-    <div class="form-group">
-        <select  id="card-selection">
-            @foreach(string item in Enum.GetNames(typeof(cardSuit)))
-            {
-                foreach (string Item in Enum.GetNames(typeof(cardFace)).Where(w => w != "Joker"))
-                {
-                    var cardString = Item + " of " + item;
-                    <option value=@cardString>@cardString</option>
-             }
-         }
-         </select>
-         <select id="rule-selection">
-            @foreach(string item in Enum.GetNames(typeof(ruleType)))
-            {
-                <option value=@item>@item</option>
-            }
-        </select>
-        <input id="addRuleButton" type="button" value="Add Rule"/>
-    </div>
-</div>
+<form asp-action="CreateRuleSet">
+    <div class="select-container" id="select-container">
+        <div class="form-group">
+            @Html.DropDownList("CardFace")
+        </div>
+        <div class="form-group">
+            @Html.DropDownList("CardSuit")
+            </div>
+            <div class="form-group">
+                @Html.DropDownList("CardRule")
+               </div>
+        <div class="form-group">
+        @foreach (var item in Model.ExistingRules)
+        {
+            <p>@item.Card.Face @item.Card.Suit</p>
+        }
+            </div>
+                <input id="addRuleButton" type="submit" value="Add Rule" />
+        </div>
+</form>
 

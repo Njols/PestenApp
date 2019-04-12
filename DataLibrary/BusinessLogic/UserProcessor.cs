@@ -19,12 +19,12 @@ namespace DataLibrary.BusinessLogic
             };
             string sql = @"INSERT INTO [User] (Email, Username, Password) 
                            VALUES (@Email, @Username, @Password)";
-            return SqlDataAcces.SaveData(sql, user);
+            return SqlDataAccess.SaveData(sql, user);
         }
         public static List<User> GetUsers ()
         {
             string sql = @"SELECT Id, Username, Email, Password FROM [User]";
-            return SqlDataAcces.LoadData<User>(sql);
+            return SqlDataAccess.LoadData<User>(sql);
         }
     }
 }
