@@ -72,6 +72,9 @@ namespace PestApp.Controllers
         [HttpPost]
         public IActionResult CreateRuleSet(RuleViewModel ruleViewModel)
         {
+            ViewBag.CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
+            ViewBag.CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
+            ViewBag.CardRule = new SelectList(Enum.GetNames(typeof(ruleType)));
             ruleViewModel.ExistingRules.Add(new Rule(new Card(ruleViewModel.CardFace, ruleViewModel.CardSuit), ruleViewModel.CardRule, 0));
             return View(ruleViewModel);
         }

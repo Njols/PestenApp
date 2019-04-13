@@ -14,10 +14,10 @@
                 @Html.DropDownList("CardRule")
                </div>
         <div class="form-group">
-        @foreach (var item in Model.ExistingRules)
-        {
+          @foreach (var item in Model.ExistingRules)
+          {
             <p>@item.Card.Face @item.Card.Suit</p>
-        }
+          }
             </div>
                 <input id="addRuleButton" type="submit" value="Add Rule" />
         </div>
