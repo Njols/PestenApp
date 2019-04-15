@@ -91,7 +91,7 @@ namespace PestApp.Controllers
             }
             return View(users);
         }
-        public IActionResult AlternateCreateRuleSet ()
+        public IActionResult CreateRuleSet ()
         {
             ViewBag.CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
             ViewBag.CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
@@ -106,7 +106,7 @@ namespace PestApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult AlternateCreateRuleset (cardFace cardFace, cardSuit cardSuit, ruleType ruleType)
+        public IActionResult CreateRuleSet (cardFace cardFace, cardSuit cardSuit, ruleType ruleType)
         {
             ViewBag.CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
             ViewBag.CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
