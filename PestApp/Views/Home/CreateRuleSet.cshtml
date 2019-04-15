@@ -1,25 +1,40 @@
-﻿@model RuleViewModel
+﻿
 @{
-    ViewData["Title"] = "CreateRuleSet";
+    ViewData["Title"] = "AlternateCreateRuleSet";
 }
-<form asp-action="CreateRuleSet">
-    <div class="select-container" id="select-container">
-        <div class="form-group">
-            @Html.DropDownList("CardFace")
-        </div>
-        <div class="form-group">
-            @Html.DropDownList("CardSuit")
-            </div>
-            <div class="form-group">
-                @Html.DropDownList("CardRule")
-               </div>
-        <div class="form-group">
-          @foreach (var item in Model.ExistingRules)
-          {
-            <p>@item.Card.Face @item.Card.Suit</p>
-          }
-            </div>
-                <input id="addRuleButton" type="submit" value="Add Rule" />
-        </div>
-</form>
 
+<h2>AlternateCreateRuleSet</h2>
+@model IEnumerable<Rule>
+@using (Html.BeginForm("AlternateCreateRuleSet", "Home", FormMethod.Post))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Card.Face);
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Card.Suit);
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RuleType);
+                </th>
+            </tr>
+        </thead>
+        <tbody id="childtable">
+            @Html.EditorFor(model => Model);
+        </tbody>
+    </table>
+    <div class="form-group">
+        @Html.DropDownList("CardFace")
+    </div>
+    <div class="form-group">
+        @Html.DropDownList("CardSuit")
+    </div>
+    <div class="form-group">
+        @Html.DropDownList("CardRule")
+    </div>
+    <input id="addRuleButton" type="submit" value="Add Rule" />
+
+
+}
