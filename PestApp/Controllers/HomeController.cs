@@ -106,7 +106,7 @@ namespace PestApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult AlternateCreateRuleset ([BindRequired]List<Rule> ruleList, cardFace cardFace, cardSuit cardSuit, ruleType ruleType)
+        public IActionResult AlternateCreateRuleset (cardFace cardFace, cardSuit cardSuit, ruleType ruleType)
         {
             ViewBag.CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
             ViewBag.CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
