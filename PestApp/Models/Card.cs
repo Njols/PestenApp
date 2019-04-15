@@ -30,7 +30,7 @@ namespace PestApp.Models
         {
             if (Face != cardFace.Joker)
             {
-                return Suit.ToString().Substring(0, 1) + Face.ToString().Substring(Face.ToString().Length - 1, 1);
+                return Suit.ToString() + " " +  Face.ToString();
             }
             else
             {

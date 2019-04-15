@@ -9,11 +9,33 @@ using DataLibrary;
 using DataLibrary.BusinessLogic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using DataLibrary.DataAccess;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace PestApp.Controllers
 {
     public class HomeController : Controller
     {
+        private static List<Rule> MockDb = new List<Rule>
+        {
+            new Rule(new Card{Face = cardFace.Ace, Suit = cardSuit.Clubs }, ruleType.changeSuits, 0),
+            new Rule(new Card{Face = cardFace.Ace, Suit = cardSuit.Clubs }, ruleType.changeSuits, 0),
+            new Rule(new Card{Face = cardFace.Ace, Suit = cardSuit.Clubs }, ruleType.changeSuits, 0)
+        };
+        private List<Rule> _ruleList;
+        private List<Rule> RuleList
+        {
+            get
+            {
+                if (_ruleList == null)
+                    _ruleList = HttpContext.Session.Get<List<Rule>>("RuleList");
+                return _ruleList;
+            }
+            set
+            {
+                _ruleList = value;
+                HttpContext.Session.Set("RuleList", _ruleList);
+            }
+        }
         public IActionResult Index()
         {
             return View();
@@ -69,23 +91,35 @@ namespace PestApp.Controllers
             }
             return View(users);
         }
-        [HttpPost]
-        public IActionResult CreateRuleSet(RuleViewModel ruleViewModel)
+        public IActionResult CreateRuleSet ()
         {
             ViewBag.CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
             ViewBag.CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
             ViewBag.CardRule = new SelectList(Enum.GetNames(typeof(ruleType)));
-            ruleViewModel.ExistingRules.Add(new Rule(new Card(ruleViewModel.CardFace, ruleViewModel.CardSuit), ruleViewModel.CardRule, 0));
-            return View(ruleViewModel);
+
+            if (RuleList == null)
+            {
+               RuleList = MockDb;
+            }
+
+            return View(RuleList);
         }
-        public IActionResult CreateRuleSet()
+
+        [HttpPost]
+        public IActionResult CreateRuleSet (cardFace cardFace, cardSuit cardSuit, ruleType ruleType)
         {
             ViewBag.CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
             ViewBag.CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
             ViewBag.CardRule = new SelectList(Enum.GetNames(typeof(ruleType)));
-            RuleViewModel ruleViewModel = new RuleViewModel();
-            ruleViewModel.ExistingRules = new List<Rule>();
-            return View(ruleViewModel);
+
+            Card card = new Card { Face = cardFace, Suit = cardSuit };
+
+            List<Rule> rules = new List<Rule>();
+            rules.AddRange(RuleList);
+            rules.Add((new Rule(card, ruleType, 0)));
+            RuleList = rules;
+
+            return View(RuleList);
         }
     }
 }
