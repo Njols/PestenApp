@@ -20,6 +20,7 @@ namespace PestApp.Models
             Card = card;
             RuleType = ruletype;
             RuleAmount = ruleAmount;
+            Select = false;
         }
     }
 }

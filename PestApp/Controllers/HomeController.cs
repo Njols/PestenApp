@@ -106,8 +106,9 @@ namespace PestApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateRuleSet (cardFace cardFace, cardSuit cardSuit, ruleType ruleType, bool CheckBox)
+        public IActionResult CreateRuleSet (List<Rule> rulList, cardFace cardFace, cardSuit cardSuit, ruleType ruleType, bool CheckBox, string command)
         {
+            List<Rule> ruleList = (List<Rule>)rulList;
             if (RuleList == null)
             {
                 RuleList = MockDb;
@@ -115,23 +116,35 @@ namespace PestApp.Controllers
             ViewBag.CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
             ViewBag.CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
             ViewBag.RuleType = new SelectList(Enum.GetNames(typeof(ruleType)));
-            Card card = new Card();
-            if (CheckBox)
-            {
-                card.Face = cardFace;
-                card.Suit = cardSuit;
-            }
-            else
-            {
-                card.Face = cardFace;
-                card.Suit = cardSuit.Any;
-            }
-
             List<Rule> rules = new List<Rule>();
             rules.AddRange(RuleList);
-            rules.Add((new Rule(card, ruleType, 0)));
-            RuleList = rules;
-
+            if (command == "Add Rule")
+            {
+                Card card = new Card();
+                if (CheckBox)
+                {
+                    card.Face = cardFace;
+                    card.Suit = cardSuit;
+                }
+                else
+                {
+                    card.Face = cardFace;
+                    card.Suit = cardSuit.Any;
+                }
+                rules.Add((new Rule(card, ruleType, 0)));
+            }
+            else if (command == "Remove Rule")
+            {
+                foreach(Rule rule in ruleList)
+                {
+                    if(rule.Select)
+                    {
+                        ruleList.Remove(rule);
+                    }
+                }
+            }
+            
+            RuleList = ruleList;
             return View(RuleList);
         }
     }
