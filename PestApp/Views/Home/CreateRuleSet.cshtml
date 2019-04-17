@@ -7,33 +7,27 @@
 @model IEnumerable<Rule>
 @using (Html.BeginForm("CreateRuleSet", "Home", FormMethod.Post))
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Card.Face);
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Card.Suit);
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.RuleType);
-                </th>
-            </tr>
-        </thead>
-        <tbody id="childtable">
-            @Html.EditorFor(model => Model);
-        </tbody>
-    </table>
     <div class="form-group">
         @Html.DropDownList("CardFace")
     </div>
-    <div class="form-group">
+    <div class="form-group" id="cardSuitContainer" style="display:none">
         @Html.DropDownList("CardSuit")
     </div>
     <div class="form-group">
-        @Html.DropDownList("CardRule")
+        @Html.DropDownList("RuleType")
     </div>
+    <div id="ruleList">
+        @foreach (Rule rule in Model)
+        {
+            <p>@rule.Card @rule.RuleType</p>
+        }
+
+
+    </div>
+
+
+
+    <input id="checkBox" type="checkbox" name="CheckBox" value="true" onclick="thefunction()" />
     <input id="addRuleButton" type="submit" value="Add Rule" />
 
 

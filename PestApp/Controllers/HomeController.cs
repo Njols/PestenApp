@@ -95,7 +95,7 @@ namespace PestApp.Controllers
         {
             ViewBag.CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
             ViewBag.CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
-            ViewBag.CardRule = new SelectList(Enum.GetNames(typeof(ruleType)));
+            ViewBag.RuleType = new SelectList(Enum.GetNames(typeof(ruleType)));
 
             if (RuleList == null)
             {
@@ -106,13 +106,26 @@ namespace PestApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateRuleSet (cardFace cardFace, cardSuit cardSuit, ruleType ruleType)
+        public IActionResult CreateRuleSet (cardFace cardFace, cardSuit cardSuit, ruleType ruleType, bool CheckBox)
         {
+            if (RuleList == null)
+            {
+                RuleList = MockDb;
+            }
             ViewBag.CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
             ViewBag.CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
-            ViewBag.CardRule = new SelectList(Enum.GetNames(typeof(ruleType)));
-
-            Card card = new Card { Face = cardFace, Suit = cardSuit };
+            ViewBag.RuleType = new SelectList(Enum.GetNames(typeof(ruleType)));
+            Card card = new Card();
+            if (CheckBox)
+            {
+                card.Face = cardFace;
+                card.Suit = cardSuit;
+            }
+            else
+            {
+                card.Face = cardFace;
+                card.Suit = cardSuit.Any;
+            }
 
             List<Rule> rules = new List<Rule>();
             rules.AddRange(RuleList);

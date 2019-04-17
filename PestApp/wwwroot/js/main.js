@@ -1,13 +1,16 @@
-﻿var cardSelection = document.getElementById("card-selection");
-var ruleSelection = document.getElementById("rule-selection");
+﻿var cardSuitContainer = document.getElementById("cardSuitContainer");
 var addRuleButton = document.getElementById("addRuleButton");
-var selectContainer = document.getElementById("select-container");
+var checkBox = document.getElementById("checkBox");
 
-function CreateNewElement() {
-    var para = document.createElement("p");
-    var card = cardSelection.value;
-    var rule = ruleSelection.value;
-    var node = document.createTextNode(card + " " + rule);
-    para.appendChild(node);
-    selectContainer.appendChild(para);
+
+function thefunction() {
+    var checkBox = document.getElementById("checkBox");
+    var cardSuitContainer = document.getElementById("cardSuitContainer");
+
+    if (checkBox.checked == false) {
+        cardSuitContainer.style.display = "none";
+    }
+    else {
+        cardSuitContainer.style.display = "inline-block";
+    }
 }

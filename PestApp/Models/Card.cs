@@ -11,7 +11,7 @@ namespace PestApp.Models
     }
     public enum cardSuit
     {
-        Hearts,Diamonds,Spades,Clubs
+        Hearts,Diamonds,Spades,Clubs, Any
     }
     public class Card
     {
