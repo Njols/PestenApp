@@ -16,16 +16,15 @@
     <div class="form-group">
         @Html.DropDownList("RuleType")
     </div>
-    var index = 0;
+    var Index = 0;
     <div id="id">
         @foreach (Rule rule in Model)
         {
             <p>@rule.Card @rule.RuleType</p>
             <input type="hidden" name="Rule.ruleType" value="@rule.RuleType" />
-            <input class="removeButton" type="submit" value="@index" name="command" />
-            index++;
+            @Html.ActionLink("X", "DeleteRule", "Home", new { Index = @Index });
+            Index++;
         }
-
 
     </div>
     <input id="checkBox" type="checkbox" value="true" onclick="thefunction()" />

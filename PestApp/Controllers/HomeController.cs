@@ -106,7 +106,7 @@ namespace PestApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateRuleSet (cardFace cardFace, cardSuit cardSuit, ruleType ruleType, bool CheckBox, string command)
+        public IActionResult CreateRuleSet (cardFace cardFace, cardSuit cardSuit, ruleType ruleType, bool CheckBox)
         {
             if (RuleList == null)
             {
@@ -117,8 +117,6 @@ namespace PestApp.Controllers
             ViewBag.RuleType = new SelectList(Enum.GetNames(typeof(ruleType)));
             List<Rule> rules = new List<Rule>();
             rules.AddRange(RuleList);
-            if (command == "Add Rule")
-            {
                 Card card = new Card();
                 if (CheckBox)
                 {
@@ -131,14 +129,17 @@ namespace PestApp.Controllers
                     card.Suit = cardSuit.Any;
                 }
                 rules.Add((new Rule(card, ruleType, 0)));
-            }
-            else
-            {
-                rules.RemoveAt(Convert.ToInt32(command));
-            }
-            
             RuleList = rules;
             return View(RuleList);
+        }
+        
+        public IActionResult DeleteRule (int Index)
+        {
+            List<Rule> rules = new List<Rule>();
+            rules.AddRange(RuleList);
+            rules.RemoveAt(Index);
+            RuleList = rules;
+            return RedirectToAction("CreateRuleSet");
         }
     }
 }
