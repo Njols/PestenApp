@@ -106,9 +106,8 @@ namespace PestApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateRuleSet (List<Rule> rulList, cardFace cardFace, cardSuit cardSuit, ruleType ruleType, bool CheckBox, string command)
+        public IActionResult CreateRuleSet (cardFace cardFace, cardSuit cardSuit, ruleType ruleType, bool CheckBox, string command)
         {
-            List<Rule> ruleList = (List<Rule>)rulList;
             if (RuleList == null)
             {
                 RuleList = MockDb;
@@ -133,18 +132,12 @@ namespace PestApp.Controllers
                 }
                 rules.Add((new Rule(card, ruleType, 0)));
             }
-            else if (command == "Remove Rule")
+            else
             {
-                foreach(Rule rule in ruleList)
-                {
-                    if(rule.Select)
-                    {
-                        ruleList.Remove(rule);
-                    }
-                }
+                rules.RemoveAt(Convert.ToInt32(command));
             }
             
-            RuleList = ruleList;
+            RuleList = rules;
             return View(RuleList);
         }
     }

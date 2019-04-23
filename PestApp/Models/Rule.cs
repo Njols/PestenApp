@@ -14,13 +14,11 @@ namespace PestApp.Models
         public Card Card { get; set; }
         public int RuleAmount { get; set; }
         public ruleType RuleType { get; set; }
-        public bool Select { get; set; }
         public Rule (Card card, ruleType ruletype, int ruleAmount)
         {
             Card = card;
             RuleType = ruletype;
             RuleAmount = ruleAmount;
-            Select = false;
         }
     }
 }

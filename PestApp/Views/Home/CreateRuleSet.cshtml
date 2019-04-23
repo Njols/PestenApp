@@ -4,7 +4,7 @@
 }
 
 <h2>AlternateCreateRuleSet</h2>
-@model List<Rule>
+@model IEnumerable<Rule>
 @using (Html.BeginForm("CreateRuleSet", "Home", FormMethod.Post))
 {
     <div class="form-group">
@@ -16,24 +16,20 @@
     <div class="form-group">
         @Html.DropDownList("RuleType")
     </div>
-    <div id="ruleList">
+    var index = 0;
+    <div id="id">
         @foreach (Rule rule in Model)
         {
             <p>@rule.Card @rule.RuleType</p>
-            @Html.EditorFor(modelItem => rule.Select);
+            <input type="hidden" name="Rule.ruleType" value="@rule.RuleType" />
+            <input class="removeButton" type="submit" value="@index" name="command" />
+            index++;
         }
 
 
     </div>
-
-    @foreach(var item in Model)
-    {
-        @Html.HiddenFor(model => Model);
-    }
-
     <input id="checkBox" type="checkbox" value="true" onclick="thefunction()" />
     <input id="addButton" type="submit" value="Add Rule" name="command" />
-    <input id="removeButton" type="submit" value="Remove Rule" name="command" />
 
 
 }
