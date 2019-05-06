@@ -22,7 +22,7 @@
         {
             <p>@rule.Card @rule.RuleType</p>
             <input type="hidden" name="Rule.ruleType" value="@rule.RuleType" />
-            @Html.ActionLink("X", "DeleteRule", "Home", new { Index = @Index });
+            @Html.ActionLink("Remove", "DeleteRule", "Home", new { Index = @Index });
             Index++;
         }
 

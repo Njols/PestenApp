@@ -17,9 +17,9 @@ namespace PestApp.Controllers
     {
         private static List<Rule> MockDb = new List<Rule>
         {
-            new Rule(new Card{Face = cardFace.Ace, Suit = cardSuit.Clubs }, ruleType.changeSuits, 0),
-            new Rule(new Card{Face = cardFace.Ace, Suit = cardSuit.Clubs }, ruleType.changeSuits, 0),
-            new Rule(new Card{Face = cardFace.Ace, Suit = cardSuit.Clubs }, ruleType.changeSuits, 0)
+            new Rule(new CardWithSuit{Face = cardFace.Ace, Suit = cardSuit.Clubs }, ruleType.changeSuits, 0),
+            new Rule(new CardWithSuit{Face = cardFace.Ace, Suit = cardSuit.Clubs }, ruleType.changeSuits, 0),
+            new Rule(new CardWithSuit{Face = cardFace.Ace, Suit = cardSuit.Clubs }, ruleType.changeSuits, 0)
         };
         private List<Rule> _ruleList;
         private List<Rule> RuleList
@@ -117,7 +117,7 @@ namespace PestApp.Controllers
             ViewBag.RuleType = new SelectList(Enum.GetNames(typeof(ruleType)));
             List<Rule> rules = new List<Rule>();
             rules.AddRange(RuleList);
-                Card card = new Card();
+                CardWithSuit card = new CardWithSuit();
                 if (CheckBox)
                 {
                     card.Face = cardFace;

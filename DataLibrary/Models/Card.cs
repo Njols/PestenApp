@@ -1,18 +1,11 @@
-﻿using System;
+﻿using DataLibrary.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PestApp.Models
+namespace DataLibrary.Models
 {
-    public enum cardFace
-    {
-        Ace,Two,Three,Four,Five,Six,Seven,Eight,Nine,Ten,Jack,Queen,King,Joker
-    }
-    public enum cardSuit
-    {
-        Hearts,Diamonds,Spades,Clubs, Any
-    }
     public class Card
     {
         public cardFace Face { get; set; }

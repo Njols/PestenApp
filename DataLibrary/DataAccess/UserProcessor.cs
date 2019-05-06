@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Dapper;
 
-namespace DataLibrary.BusinessLogic
+namespace DataLibrary.DataAccess
 {
     public static class UserProcessor
     {
