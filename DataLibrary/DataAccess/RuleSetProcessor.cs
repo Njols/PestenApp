@@ -5,7 +5,7 @@ using DataLibrary.Models;
 
 namespace DataLibrary.DataAccess
 {
-    public static class RuleSetProcessor
+    public  class RuleSetProcessor
     {
         public int CreateRuleSet (List<Rule> rules, User user)
         {
@@ -18,6 +18,7 @@ namespace DataLibrary.DataAccess
 
             string sql = @"INSERT INTO [User] (Email, Username, Password) 
                            VALUES (@Email, @Username, @Password)";
+            return 0;
         }
 
     }

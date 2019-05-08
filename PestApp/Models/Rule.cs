@@ -9,10 +9,10 @@ namespace PestApp.Models
 
     public class Rule
     {
-        public CardWithSuit Card { get; set; }
+        public Card Card { get; set; }
         public int RuleAmount { get; set; }
         public ruleType RuleType { get; set; }
-        public Rule (CardWithSuit card, ruleType ruletype, int ruleAmount)
+        public Rule (Card card, ruleType ruletype, int ruleAmount)
         {
             Card = card;
             RuleType = ruletype;

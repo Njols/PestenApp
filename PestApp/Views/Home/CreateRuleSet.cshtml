@@ -20,7 +20,7 @@
     <div id="id">
         @foreach (Rule rule in Model)
         {
-            <p>@rule.Card @rule.RuleType</p>
+            <p>@rule.Card.GetCard @rule.RuleType</p>
             <input type="hidden" name="Rule.ruleType" value="@rule.RuleType" />
             @Html.ActionLink("Remove", "DeleteRule", "Home", new { Index = @Index });
             Index++;
