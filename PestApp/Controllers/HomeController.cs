@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using DataLibrary.DataAccess;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PestApp.Enums;
+using PestApp.ViewModels;
 
 namespace PestApp.Controllers
 {
@@ -93,44 +94,41 @@ namespace PestApp.Controllers
         }
         public IActionResult CreateRuleSet ()
         {
-            ViewBag.CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
-            ViewBag.CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
-            ViewBag.RuleType = new SelectList(Enum.GetNames(typeof(ruleType)));
-
             if (RuleList == null)
             {
                RuleList = MockDb;
             }
-
-            return View(RuleList);
+            CreateRuleSetViewModel model = new CreateRuleSetViewModel
+            {
+                Rules = RuleList
+            };
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult CreateRuleSet (cardFace cardFace, cardSuit cardSuit, ruleType ruleType, bool CheckBox)
+        public IActionResult CreateRuleSet (CreateRuleSetViewModel model)
         {
             if (RuleList == null)
             {
                 RuleList = MockDb;
             }
-            ViewBag.CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
-            ViewBag.CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
-            ViewBag.RuleType = new SelectList(Enum.GetNames(typeof(ruleType)));
             List<Rule> rules = new List<Rule>();
             rules.AddRange(RuleList);
                 Card card = new Card();
-                if (CheckBox)
+                if (model.CheckBox)
                 {
-                    card.Face = cardFace;
-                    card.Suit = cardSuit;
+                    card.Face = model.Face;
+                    card.Suit = model.Suit;
                 }
                 else
                 {
-                    card.Face = cardFace;
+                    card.Face = model.Face;
                     card.Suit = cardSuit.Any;
                 }
-                rules.Add((new Rule(card, ruleType, 0)));
+                rules.Add((new Rule(card, model.Type, 0)));
             RuleList = rules;
-            return View(RuleList);
+            model.Rules = rules;
+            return View(model);
         }
         
         public IActionResult DeleteRule (int Index)

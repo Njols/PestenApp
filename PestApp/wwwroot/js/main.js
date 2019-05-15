@@ -4,7 +4,7 @@ var checkBox = document.getElementById("checkBox");
 
 
 function thefunction() {
-    var checkBox = document.getElementById("checkBox");
+    var checkBox = document.getElementById("CheckBox");
     var cardSuitContainer = document.getElementById("cardSuitContainer");
 
     if (checkBox.checked == false) {
