@@ -17,7 +17,7 @@ namespace PestApp.Models
         }
         public string GetCard()
         {
-            return (Face.ToString() + Suit.ToString());
+            return (Suit.ToString() + " " + Face.ToString());
         }
     }
 }

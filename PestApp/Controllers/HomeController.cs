@@ -37,6 +37,21 @@ namespace PestApp.Controllers
                 HttpContext.Session.Set("RuleList", _ruleList);
             }
         }
+        private List<additionalRule> _additionalRules;
+        private List<additionalRule> AdditionalRules
+        {
+            get
+            {
+                if (_additionalRules == null)
+                    _additionalRules = HttpContext.Session.Get<List<additionalRule>>("AdditionalRuleList");
+                return _additionalRules;
+            }
+            set
+            {
+                _additionalRules = value;
+                HttpContext.Session.Set("AdditionalRuleList", _additionalRules);
+            }
+        }
         public IActionResult Index()
         {
             return View();
@@ -105,7 +120,7 @@ namespace PestApp.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost()]
         public IActionResult CreateRuleSet (CreateRuleSetViewModel model)
         {
             if (RuleList == null)
@@ -131,13 +146,18 @@ namespace PestApp.Controllers
             return View(model);
         }
         
-        public IActionResult DeleteRule (int Index)
+        public IActionResult DeleteRule (int Index, CreateRuleSetViewModel viewModel)
         {
             List<Rule> rules = new List<Rule>();
             rules.AddRange(RuleList);
             rules.RemoveAt(Index);
             RuleList = rules;
-            return RedirectToAction("CreateRuleSet");
+            return RedirectToAction("CreateRuleSet", new {model = viewModel });
+        }
+
+        public IActionResult AddAditionalRule ()
+        {
+            return RedirectToAction("");
         }
     }
 }

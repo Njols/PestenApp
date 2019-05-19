@@ -10,17 +10,15 @@ namespace PestApp.Models
     public class RuleSet
     {
         public List<additionalRule> ExtraRules { get; set; }
-        public User User { get; set; }
         public List<Rule> Rules { get; set; }
-        public RuleSet (User user, List<Rule> rules)
+        public string Name { get; set; }
+        public RuleSet ( List<Rule> rules)
         {
-            User = user;
             Rules = rules;
         }
-        public RuleSet (User user, List<Rule> rules, List<additionalRule> additionalRules)
+        public RuleSet ( List<Rule> rules, List<additionalRule> additionalRules)
         {
             ExtraRules = additionalRules;
-            User = user;
             Rules = rules;
         }
     }

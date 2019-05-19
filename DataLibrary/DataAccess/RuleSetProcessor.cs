@@ -8,14 +8,15 @@ namespace DataLibrary.DataAccess
 {
     public  class RuleSetProcessor
     {
-        public void CreateRuleSet (List<Rule> rules, User user, List<additionalRule>additionalRules)
+        public void CreateRuleSet (List<Rule> rules, User user, List<additionalRule>additionalRules, string name)
         {
             RuleSet ruleSet = new RuleSet(user, rules, additionalRules);
 
             int UserId = user.Id;
+            string Name = name;
 
-            string sql = @"INSERT INTO [RuleSet] (UserId)
-                             VALUES (@UserId)
+            string sql = @"INSERT INTO [RuleSet] (UserId, Name)
+                             VALUES (@UserId, @Name)
                              SELECT SCOPE_IDENTITY()";
 
             int ruleSetId = SqlDataAccess.SaveData(sql, ruleSet);

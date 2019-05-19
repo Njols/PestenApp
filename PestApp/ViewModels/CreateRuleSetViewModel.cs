@@ -23,6 +23,8 @@ namespace PestApp.ViewModels
         public ruleType Type { get; set; }
         [BindRequired]
         public bool CheckBox { get; set; }
+        [BindRequired]
+        public string Name { get; set; }
         public IEnumerable<Rule> Rules;
     }
 }

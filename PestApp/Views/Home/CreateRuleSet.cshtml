@@ -20,14 +20,20 @@
     <div id="id">
         @foreach (Rule rule in Model.Rules)
         {
-            <p>@rule.Card.GetCard() @rule.RuleType</p>
-            @Html.ActionLink("Remove", "DeleteRule", "Home", new { Index = @Index });
+        <p>
+            @rule.Card.GetCard() @rule.RuleType
+            @Html.ActionLink("Remove", "CreateRuleSet", "Home", new { Index = @Index });
+            <input id="addButton" type="submit" value="Add Rule" name="command" />
+        </p>
             Index++;
         }
 
     </div>
+    @Html.TextBoxFor(m => m.Name)
+    
     <input name="CheckBox" id="CheckBox" type="checkbox" value="true" onclick="thefunction()" />
     <input id="addButton" type="submit" value="Add Rule" name="command" />
+    @Html.ActionLink("Save Ruleset", "SaveRuleSet", "Home")
 
 
 }

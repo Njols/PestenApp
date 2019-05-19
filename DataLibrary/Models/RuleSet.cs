@@ -14,6 +14,7 @@ namespace DataLibrary.Models
         public List<additionalRule> ExtraRules { get; set; }
         public User User { get; set; }
         public List<Rule> Rules { get; set; }
+        public string Name { get; set; }
         public RuleSet (User user, List<Rule> rules)
         {
             User = user;
