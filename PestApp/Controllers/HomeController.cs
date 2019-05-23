@@ -16,11 +16,13 @@ namespace PestApp.Controllers
 {
     public class HomeController : Controller
     {
+
+        private UserProcessor _userProcessor = new UserProcessor();
         private static List<Rule> MockDb = new List<Rule>
         {
-            new Rule(new Card{Face = cardFace.Ace, Suit = cardSuit.Clubs }, ruleType.changeSuits, 0),
-            new Rule(new Card{Face = cardFace.Ace, Suit = cardSuit.Clubs }, ruleType.changeSuits, 0),
-            new Rule(new Card{Face = cardFace.Ace, Suit = cardSuit.Clubs }, ruleType.changeSuits, 0)
+            new Rule(new SuitedCard(cardFace.Ace, cardSuit.Diamonds), ruleType.changeSuits, 0),
+            new Rule(new SuitedCard(cardFace.Five, cardSuit.Spades), ruleType.changeSuits, 0),
+            new Rule(new Card(cardFace.Jack), ruleType.changeSuits, 0)
         };
         private List<Rule> _ruleList;
         private List<Rule> RuleList
@@ -92,14 +94,14 @@ namespace PestApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserProcessor.CreateUser(user.Email, user.Username, user.Password);
+                _userProcessor.CreateUser(user.Email, user.Username, user.Password);
                 return RedirectToAction("Index");
             }
             return View();
         }
         public IActionResult ViewUsers ()
         {
-            var data = UserProcessor.GetUsers();
+            var data = _userProcessor.GetUsers();
             List<User> users = new List<User>();
             foreach (var user in data)
             {
@@ -132,13 +134,11 @@ namespace PestApp.Controllers
                 Card card = new Card();
                 if (model.CheckBox)
                 {
-                    card.Face = model.Face;
-                    card.Suit = model.Suit;
+                    card = new SuitedCard(model.Face, model.Suit);
                 }
                 else
                 {
                     card.Face = model.Face;
-                    card.Suit = cardSuit.Any;
                 }
                 rules.Add((new Rule(card, model.Type, 0)));
             RuleList = rules;
@@ -153,11 +153,6 @@ namespace PestApp.Controllers
             rules.RemoveAt(Index);
             RuleList = rules;
             return RedirectToAction("CreateRuleSet", new {model = viewModel });
-        }
-
-        public IActionResult AddAditionalRule ()
-        {
-            return RedirectToAction("");
         }
     }
 }

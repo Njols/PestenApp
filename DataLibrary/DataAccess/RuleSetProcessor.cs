@@ -8,6 +8,7 @@ namespace DataLibrary.DataAccess
 {
     public  class RuleSetProcessor
     {
+        SqlDataAccess _sqlDataAccess;
         public void CreateRuleSet (List<Rule> rules, User user, List<additionalRule>additionalRules, string name)
         {
             RuleSet ruleSet = new RuleSet(user, rules, additionalRules);
@@ -19,7 +20,7 @@ namespace DataLibrary.DataAccess
                              VALUES (@UserId, @Name)
                              SELECT SCOPE_IDENTITY()";
 
-            int ruleSetId = SqlDataAccess.SaveData(sql, ruleSet);
+            int ruleSetId = _sqlDataAccess.SaveData(sql, ruleSet);
 
 
             foreach(Rule rule in rules)
@@ -31,11 +32,11 @@ namespace DataLibrary.DataAccess
                 string query = @"INSERT INTO [Rule] (Card,RuleType,Amount)
                                  VALUES (@Card, @RuleType, @Amount)
                                  SELECT SCOPE_IDENTITY()";
-                int ruleId = SqlDataAccess.SaveData(query, rule);
+                int ruleId = _sqlDataAccess.SaveData(query, rule);
 
                 string query2 = @"INSERT INTO [Rule_RuleSet] (RuleSetId, RuleId)
                                   VALUES(@ruleSetId, @ruleId)";
-                SqlDataAccess.SaveData(query2, rule);
+                _sqlDataAccess.SaveData(query2, rule);
             }
 
             foreach (additionalRule rule in additionalRules)
@@ -44,6 +45,7 @@ namespace DataLibrary.DataAccess
 
                 string query = @"INSERT INTO [AdditionalRule_RuleSet] (RuleSetId, AdditionalRuleId)
                                  VALUES (@ruleSetId, @AdditonalRuleId";
+                _sqlDataAccess.SaveData(query, rule);
             }
 
             //still wip

@@ -5,17 +5,17 @@ using System.Data.SqlClient;
 
 namespace DataLibrary.DataAccess
 {
-    public static class SqlDataAccess
+    public class SqlDataAccess
     {
-        public static string ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PestDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-        public static List<T> LoadData<T>(string query)
+        public string ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PestDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        public List<T> LoadData<T>(string query)
         {
             using (IDbConnection cnn = new SqlConnection(ConnectionString))
             {
                 return cnn.Query<T>(query).AsList();
             }
         }
-        public static int SaveData<T> (string query, T data)
+        public int SaveData<T> (string query, T data)
         {
             using (IDbConnection cnn = new SqlConnection(ConnectionString))
             {

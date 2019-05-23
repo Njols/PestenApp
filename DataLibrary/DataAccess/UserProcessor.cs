@@ -7,9 +7,10 @@ using Dapper;
 
 namespace DataLibrary.DataAccess
 {
-    public static class UserProcessor
+    public class UserProcessor
     {
-        public static int CreateUser (string Email, string Username, string Password)
+        private SqlDataAccess _sqlDataAccess;
+        public int CreateUser (string Email, string Username, string Password)
         {
             User user = new User
             {
@@ -19,12 +20,23 @@ namespace DataLibrary.DataAccess
             };
             string sql = @"INSERT INTO [User] (Email, Username, Password) 
                            VALUES (@Email, @Username, @Password)";
-            return SqlDataAccess.SaveData(sql, user);
+            return _sqlDataAccess.SaveData(sql, user);
         }
-        public static List<User> GetUsers ()
+        public List<User> GetUsers ()
         {
             string sql = @"SELECT Id, Username, Email, Password FROM [User]";
-            return SqlDataAccess.LoadData<User>(sql);
+            return _sqlDataAccess.LoadData<User>(sql);
+        }
+        public User GetUserByEmail (string email)
+        {
+            string sql = @"SELECT Id, Username, Email, Password FROM [User] WHERE Email = @email";
+            return _sqlDataAccess.LoadData<User>(sql)[0];
+        }
+        
+        public User GetUserById (int id)
+        {
+            string sql = @"SELECT Id, Username, Email, Password FROM [User] WHERE Id = @id";
+            return _sqlDataAccess.LoadData<User>(sql)[0];
         }
     }
 }

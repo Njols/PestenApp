@@ -5,19 +5,17 @@ namespace PestApp.Models
     public class Card
     {
         public cardFace Face { get; set; }
-        public cardSuit Suit { get; set; }
-        public Card (cardFace face, cardSuit suit)
+        public Card (cardFace face)
         {
             Face = face;
-            Suit = suit;
         }
         public Card ()
         {
 
         }
-        public string GetCard()
+        public virtual string GetCard()
         {
-            return (Suit.ToString() + " " + Face.ToString());
+            return ("Any " + Face.ToString());
         }
     }
 }
