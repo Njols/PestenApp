@@ -44,7 +44,7 @@ namespace DataLibrary.DataAccess
                 int AdditionalRuleId = (int)rule;
 
                 string query = @"INSERT INTO [AdditionalRule_RuleSet] (RuleSetId, AdditionalRuleId)
-                                 VALUES (@ruleSetId, @AdditonalRuleId";
+                                 VALUES (@ruleSetId, @AdditonalRuleId)";
                 _sqlDataAccess.SaveData(query, rule);
             }
 
