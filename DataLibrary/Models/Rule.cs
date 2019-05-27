@@ -1,14 +1,11 @@
-﻿using System;
+﻿using Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataLibrary.Models
 {
-    public enum ruleType
-    {
-        take, revertTime, skipPlayer, extraTurns, switchSeats, changeSuits, stackAfter
-    }
     public class Rule
     {
         public Card Card { get; set; }

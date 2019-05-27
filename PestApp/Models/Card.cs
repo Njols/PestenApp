@@ -1,4 +1,4 @@
-﻿using PestApp.Enums;
+﻿using Enums;
 
 namespace PestApp.Models
 {

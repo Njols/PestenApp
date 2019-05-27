@@ -5,16 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PestApp.Models;
-using DataLibrary;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using DataLibrary.DataAccess;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using PestApp.Enums;
 using PestApp.ViewModels;
 using Logic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using Newtonsoft.Json;
+using Enums;
 
 namespace PestApp.Controllers
 {
@@ -176,6 +172,11 @@ namespace PestApp.Controllers
             RuleList = rules;
             model.Rules = rules;
             return View(model);
+        }
+        public IActionResult SaveRuleSet (CreateRuleSetViewModel viewModel)
+        {
+            string email = User.Claims.First().Value;
+            _ruleSetLogic.CreateRuleSet(RuleList, email, AdditionalRules, viewModel.Name);
         }
     }
 }

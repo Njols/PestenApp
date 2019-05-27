@@ -1,5 +1,5 @@
 ﻿using DataLibrary.DataAccess;
-using DataLibrary.Enums;
+using Enums;
 using DataLibrary.Models;
 using System;
 using System.Collections.Generic;

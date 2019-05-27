@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLibrary", "DataLibrary\
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{DB73360D-08F3-4442-9ED1-AFE4EB7A7777}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{96A33862-BA0A-40A4-A834-D4B32FE733E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic", "Logic\Logic.csproj", "{96A33862-BA0A-40A4-A834-D4B32FE733E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enums", "Enums\Enums.csproj", "{99470C2F-36A6-49E3-806F-6DCF84D84140}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{96A33862-BA0A-40A4-A834-D4B32FE733E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96A33862-BA0A-40A4-A834-D4B32FE733E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96A33862-BA0A-40A4-A834-D4B32FE733E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99470C2F-36A6-49E3-806F-6DCF84D84140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99470C2F-36A6-49E3-806F-6DCF84D84140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99470C2F-36A6-49E3-806F-6DCF84D84140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99470C2F-36A6-49E3-806F-6DCF84D84140}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
