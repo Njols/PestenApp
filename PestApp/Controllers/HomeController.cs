@@ -139,32 +139,25 @@ namespace PestApp.Controllers
             {
                 RuleList = MockDb;
             }
-            if (TempData.ContainsKey("viewModel"))
+            CreateRuleSetViewModel model = new CreateRuleSetViewModel
             {
-                string tempDataString = TempData["viewModel"].ToString();
-                CreateRuleSetViewModel viewModel = JsonConvert.DeserializeObject<CreateRuleSetViewModel>(tempDataString);
-                viewModel.Rules = RuleList;
-                return View(viewModel);
-            }
-            else
-            {
-                CreateRuleSetViewModel model = new CreateRuleSetViewModel
-                {
-                    Rules = RuleList
-                };
-                return View(model);
-            }
+                Rules = RuleList
+            };
+            return View(model);
         }
 
         [HttpPost()]
-        public IActionResult CreateRuleSet (CreateRuleSetViewModel model)
+        public IActionResult CreateRuleSet (CreateRuleSetViewModel model, string command)
         {
             if (RuleList == null)
             {
                 RuleList = MockDb;
             }
+
             List<Rule> rules = new List<Rule>();
             rules.AddRange(RuleList);
+            if (command == "Add Rule")
+            {
                 Card card = new Card();
                 if (model.CheckBox)
                 {
@@ -175,20 +168,14 @@ namespace PestApp.Controllers
                     card.Face = model.Face;
                 }
                 rules.Add((new Rule(card, model.Type, 0)));
+            }
+            else
+            {
+                rules.RemoveAt(Convert.ToInt32(command));
+            }
             RuleList = rules;
             model.Rules = rules;
             return View(model);
-        }
-        [HttpPost()]
-        public IActionResult DeleteRule (string remove, CreateRuleSetViewModel viewModel)
-        {
-            List<Rule> rules = new List<Rule>();
-            rules.AddRange(RuleList);
-            rules.RemoveAt(Convert.ToInt32(remove));
-            RuleList = rules;
-            TempData["name"] = viewModel.Name;
-            TempData["viewModel"] = JsonConvert.SerializeObject(viewModel);
-            return RedirectToAction("CreateRuleSet");
         }
     }
 }

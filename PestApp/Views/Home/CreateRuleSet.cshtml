@@ -1,26 +1,10 @@
 ﻿@using PestApp.ViewModels
 @{
-    ViewData["Title"] = "AlternateCreateRuleSet";
+    ViewData["Title"] = "CreateRuleSet";
 }
 
-<h2>AlternateCreateRuleSet</h2>
+<h2>CreateRuleSet</h2>
 @model CreateRuleSetViewModel
-@using (Html.BeginForm("DeleteRule", "Home", FormMethod.Post))
-{
-<div class="form-group">
-    @{
-        var Index = 0;
-    }
-    @foreach (Rule rule in Model.Rules)
-    {
-        <p>
-            @rule.Card.GetCard() @rule.RuleType
-            <button name="remove"value="@Index">X</button>
-        </p>
-        Index++;
-    }
-</div>
-}
 @using (Html.BeginForm("CreateRuleSet", "Home", FormMethod.Post))
 {
     <div class="form-group">
@@ -38,7 +22,7 @@
         {
         <p>
             @rule.Card.GetCard() @rule.RuleType
-            @Html.ActionLink("Remove", "DeleteRule", "Home", new { Index = @Index});
+            <button name="command" value="@Index">X</button>
         </p>
             Index++;
         }
