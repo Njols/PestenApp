@@ -1,4 +1,5 @@
 ﻿using Enums;
+using Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,15 @@ using System.Threading.Tasks;
 namespace PestApp.Models
 {
 
-    public class Rule
+    public class Rule : IRule
     {
-        public Card Card { get; set; }
+        public ICard Card { get; set; }
         public int RuleAmount { get; set; }
-        public ruleType RuleType { get; set; }
-        public Rule (Card card, ruleType ruletype, int ruleAmount)
+        public ruleType Type { get; set; }
+        public Rule (ICard card, ruleType ruletype, int ruleAmount)
         {
             Card = card;
-            RuleType = ruletype;
+            Type = ruletype;
             RuleAmount = ruleAmount;
         }
     }

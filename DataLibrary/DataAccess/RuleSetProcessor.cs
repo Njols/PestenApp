@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using DataLibrary.Enums;
+using Enums;
 using DataLibrary.Models;
 
 namespace DataLibrary.DataAccess

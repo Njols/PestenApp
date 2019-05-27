@@ -21,7 +21,7 @@
         @foreach (Rule rule in Model.Rules)
         {
         <p>
-            @rule.Card.GetCard() @rule.RuleType
+            @rule.Card.GetCard() @rule.Type
             <button name="command" value="@Index">X</button>
         </p>
             Index++;

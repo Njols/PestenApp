@@ -10,26 +10,17 @@ namespace DataLibrary.Models
     public class Card
     {
         public cardFace Face { get; set; }
-        public cardSuit Suit { get; set; }
-        public Card (cardFace face, cardSuit suit)
+        public Card (cardFace face)
         {
             Face = face;
-            Suit = suit;
         }
         public Card ()
         {
             Face = cardFace.Joker;
         }
-        public override string ToString()
+        public virtual string GetCard()
         {
-            if (Face != cardFace.Joker)
-            {
-                return Suit.ToString() + " " +  Face.ToString();
-            }
-            else
-            {
-                return Face.ToString();
-            }
+            return ("Any " + Face.ToString());
         }
     }
 }

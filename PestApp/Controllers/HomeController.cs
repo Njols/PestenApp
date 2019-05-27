@@ -176,7 +176,30 @@ namespace PestApp.Controllers
         public IActionResult SaveRuleSet (CreateRuleSetViewModel viewModel)
         {
             string email = User.Claims.First().Value;
-            _ruleSetLogic.CreateRuleSet(RuleList, email, AdditionalRules, viewModel.Name);
+            List<DataLibrary.Models.Rule> ruleList = new List<DataLibrary.Models.Rule>();
+            foreach (Rule rule in RuleList)
+            {
+                if (rule.Card is SuitedCard)
+                {
+                    SuitedCard suitedCard = (SuitedCard)rule.Card;
+                    DataLibrary.Models.SuitedCard card = new DataLibrary.Models.SuitedCard
+                    {
+                        Face = rule.Card.Face,
+                        Suit = suitedCard.Suit
+                    };
+                    ruleList.Add(new DataLibrary.Models.Rule(card, rule.Type, 0));
+                }
+                else
+                {
+                    DataLibrary.Models.Card card = new DataLibrary.Models.Card
+                    {
+                        Face = rule.Card.Face
+                    };
+                    ruleList.Add(new DataLibrary.Models.Rule(card, rule.Type, 0));
+                }
+            }
+            _ruleSetLogic.CreateRuleSet(ruleList, email, AdditionalRules, viewModel.Name);
+            return RedirectToAction("CreateRuleSet");
         }
     }
 }
