@@ -6,9 +6,17 @@ namespace Logic
 {
     public class UserLogic
     {
+        private IUserProcessor _userProcessor;
+        private IRuleSetProcessor _ruleSetProcessor;
+
+        public UserLogic(IUserProcessor userProcessor, IRuleSetProcessor ruleSetProcessor)
+        {
+            _userProcessor = userProcessor;
+            _ruleSetProcessor = ruleSetProcessor;
+        }
+
         public User GetUserByEmail (string email)
         {
-            UserProcessor _userProcessor = new UserProcessor();
             return _userProcessor.GetUserByEmail(email); 
         }
 
@@ -16,8 +24,16 @@ namespace Logic
         {
             if (GetUserByEmail(email) == null)
             {
-                UserProcessor _userProcessor = new UserProcessor();
-                _userProcessor.CreateUser(email, username, password);
+                PasswordHasher passwordHasher = new PasswordHasher(password);
+
+                User user = new User
+                {
+                    Email = email,
+                    Username = username,
+                    PasswordHash = passwordHasher.ToArray()
+                };
+
+                _userProcessor.AddUser(user);
                 return true;
             }
             return false;

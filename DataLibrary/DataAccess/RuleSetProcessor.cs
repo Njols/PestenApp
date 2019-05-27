@@ -6,15 +6,11 @@ using DataLibrary.Models;
 
 namespace DataLibrary.DataAccess
 {
-    public  class RuleSetProcessor
+    public  class RuleSetProcessor : IRuleSetProcessor
     {
         SqlDataAccess _sqlDataAccess;
-        public void CreateRuleSet (List<Rule> rules, User user, List<additionalRule>additionalRules, string name)
+        public void AddRuleSet (RuleSet ruleSet)
         {
-            RuleSet ruleSet = new RuleSet(user, rules, additionalRules);
-
-            int UserId = user.Id;
-            string Name = name;
 
             string sql = @"INSERT INTO [RuleSet] (UserId, Name)
                              VALUES (@UserId, @Name)
@@ -23,7 +19,7 @@ namespace DataLibrary.DataAccess
             int ruleSetId = _sqlDataAccess.SaveData(sql, ruleSet);
 
 
-            foreach(Rule rule in rules)
+            foreach(Rule rule in ruleSet.Rules)
             {
                 string Card = rule.Card.ToString();
                 string RuleType = rule.RuleType.ToString();
@@ -39,7 +35,7 @@ namespace DataLibrary.DataAccess
                 _sqlDataAccess.SaveData(query2, rule);
             }
 
-            foreach (additionalRule rule in additionalRules)
+            foreach (additionalRule rule in ruleSet.ExtraRules)
             {
                 int AdditionalRuleId = (int)rule;
 
@@ -48,7 +44,12 @@ namespace DataLibrary.DataAccess
                 _sqlDataAccess.SaveData(query, rule);
             }
 
-            //still wip
+        }
+
+        public List<RuleSet> GetRuleSets()
+        {
+            string sql = @"SELECT * FROM [RuleSet]";
+            return _sqlDataAccess.LoadList<RuleSet>(sql);
         }
 
     }

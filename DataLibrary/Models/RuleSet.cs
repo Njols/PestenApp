@@ -20,11 +20,12 @@ namespace DataLibrary.Models
             User = user;
             Rules = rules;
         }
-        public RuleSet(User user, List<Rule> rules, List<additionalRule> additionalRules)
+        public RuleSet(User user, List<Rule> rules, List<additionalRule> additionalRules, string name)
         {
             ExtraRules = additionalRules;
             User = user;
             Rules = rules;
+            Name = name;
         }
     }
 }

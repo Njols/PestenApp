@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataLibrary.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -51,6 +52,12 @@ namespace PestApp
                 options.IdleTimeout = TimeSpan.FromSeconds(10);
                 options.Cookie.IsEssential = true;
             });
+            var connectionString = Configuration.GetConnectionString("Default");
+            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddTransient(_ => Configuration.GetConnectionString("Default"));
+            services.AddSingleton<ISqlDataAccess>(new SqlDataAccess(connectionString));
+            services.AddSingleton<IUserProcessor, UserProcessor>();
+            services.AddSingleton<IRuleSetProcessor, RuleSetProcessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

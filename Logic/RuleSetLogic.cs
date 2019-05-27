@@ -7,14 +7,27 @@ using System.Text;
 
 namespace Logic
 {
-    class RuleSetLogic
+    public class RuleSetLogic
     {
+        private IUserProcessor _userProcessor;
+        private IRuleSetProcessor _ruleSetProcessor;
+
+        public RuleSetLogic (IUserProcessor userProcessor, IRuleSetProcessor ruleSetProcessor)
+        {
+            _userProcessor = userProcessor;
+            _ruleSetProcessor = ruleSetProcessor;
+        }
+
         public void CreateRuleSet(List<Rule> rules, string email, List<additionalRule> additionalRules, string name)
         {
-            UserProcessor _userProcessor = new UserProcessor();
             User user = _userProcessor.GetUserByEmail(email);
-            RuleSetProcessor _ruleSetProcessor = new RuleSetProcessor();
-            _ruleSetProcessor.CreateRuleSet(rules, user, additionalRules, name);
+
+            RuleSet ruleSet = new RuleSet(user, rules, additionalRules, name);
+            _ruleSetProcessor.AddRuleSet(ruleSet);
+        }
+        public List<RuleSet> GetRuleSets()
+        {
+            return _ruleSetProcessor.GetRuleSets();
         }
     }
 }

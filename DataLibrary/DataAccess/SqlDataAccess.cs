@@ -1,23 +1,43 @@
 ﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace DataLibrary.DataAccess
 {
-    public class SqlDataAccess
+    public class SqlDataAccess : ISqlDataAccess
     {
-        public string ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PestDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-        public List<T> LoadData<T>(string query)
+        private string _connectionString;
+        public SqlDataAccess(string connectionstring)
         {
-            using (IDbConnection cnn = new SqlConnection(ConnectionString))
+            _connectionString = connectionstring;
+        }
+        public List<T> LoadList<T>(string query)
+        {
+            using (IDbConnection cnn = new SqlConnection(_connectionString))
             {
                 return cnn.Query<T>(query).AsList();
             }
         }
+
+        public T LoadSingle<T> (string query)
+        {
+            using (IDbConnection cnn = new SqlConnection(_connectionString))
+            {
+                var result = cnn.QueryMultiple(query);
+                T finalResult = result.Read<T>().FirstOrDefault();
+                if (finalResult == null)
+                {
+                    return default(T);
+                }
+                return finalResult;
+            }
+        }
         public int SaveData<T> (string query, T data)
         {
-            using (IDbConnection cnn = new SqlConnection(ConnectionString))
+            using (IDbConnection cnn = new SqlConnection(_connectionString))
             {
                 return cnn.Execute(query, data);
             }

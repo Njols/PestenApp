@@ -5,6 +5,22 @@
 
 <h2>AlternateCreateRuleSet</h2>
 @model CreateRuleSetViewModel
+@using (Html.BeginForm("DeleteRule", "Home", FormMethod.Post))
+{
+<div class="form-group">
+    @{
+        var Index = 0;
+    }
+    @foreach (Rule rule in Model.Rules)
+    {
+        <p>
+            @rule.Card.GetCard() @rule.RuleType
+            <button name="remove"value="@Index">X</button>
+        </p>
+        Index++;
+    }
+</div>
+}
 @using (Html.BeginForm("CreateRuleSet", "Home", FormMethod.Post))
 {
     <div class="form-group">
@@ -22,7 +38,7 @@
         {
         <p>
             @rule.Card.GetCard() @rule.RuleType
-            @Html.ActionLink("Remove", "CreateRuleSet", "Home", new { Index = @Index });
+            @Html.ActionLink("Remove", "DeleteRule", "Home", new { Index = @Index});
         </p>
             Index++;
         }

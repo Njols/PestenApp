@@ -11,13 +11,29 @@ using DataLibrary.DataAccess;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PestApp.Enums;
 using PestApp.ViewModels;
+using Logic;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Newtonsoft.Json;
 
 namespace PestApp.Controllers
 {
     public class HomeController : Controller
     {
 
-        private UserProcessor _userProcessor = new UserProcessor();
+        private IUserProcessor _userProcessor;
+        private IRuleSetProcessor _ruleSetProcessor;
+        public HomeController (IUserProcessor userProcessor, IRuleSetProcessor ruleSetProcessor)
+        {
+            _userProcessor = userProcessor;
+            _ruleSetProcessor = ruleSetProcessor;
+            _userLogic = new UserLogic(_userProcessor, _ruleSetProcessor);
+            _ruleSetLogic = new RuleSetLogic(_userProcessor, _ruleSetProcessor);
+
+        }
+        private UserLogic _userLogic;
+        private RuleSetLogic _ruleSetLogic;
+
         private static List<Rule> MockDb = new List<Rule>
         {
             new Rule(new SuitedCard(cardFace.Ace, cardSuit.Diamonds), ruleType.changeSuits, 0),
@@ -90,11 +106,19 @@ namespace PestApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SignUp (User user)
+        public async Task<IActionResult> SignUp (User user)
         {
-            if (ModelState.IsValid)
+            bool userCreationHasSucceeded = _userLogic.TryToCreateUser(user.Email, user.Username, user.Password);
+            if (ModelState.IsValid && userCreationHasSucceeded)
             {
-                _userProcessor.CreateUser(user.Email, user.Username, user.Password);
+                List<Claim> claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Name, user.Username)
+                };
+                ClaimsIdentity identity = new ClaimsIdentity(claims, "user");
+                ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+                await HttpContext.SignInAsync(principal);
                 return RedirectToAction("Index");
             }
             return View();
@@ -113,13 +137,23 @@ namespace PestApp.Controllers
         {
             if (RuleList == null)
             {
-               RuleList = MockDb;
+                RuleList = MockDb;
             }
-            CreateRuleSetViewModel model = new CreateRuleSetViewModel
+            if (TempData.ContainsKey("viewModel"))
             {
-                Rules = RuleList
-            };
-            return View(model);
+                string tempDataString = TempData["viewModel"].ToString();
+                CreateRuleSetViewModel viewModel = JsonConvert.DeserializeObject<CreateRuleSetViewModel>(tempDataString);
+                viewModel.Rules = RuleList;
+                return View(viewModel);
+            }
+            else
+            {
+                CreateRuleSetViewModel model = new CreateRuleSetViewModel
+                {
+                    Rules = RuleList
+                };
+                return View(model);
+            }
         }
 
         [HttpPost()]
@@ -145,14 +179,16 @@ namespace PestApp.Controllers
             model.Rules = rules;
             return View(model);
         }
-        
-        public IActionResult DeleteRule (int Index, CreateRuleSetViewModel viewModel)
+        [HttpPost()]
+        public IActionResult DeleteRule (string remove, CreateRuleSetViewModel viewModel)
         {
             List<Rule> rules = new List<Rule>();
             rules.AddRange(RuleList);
-            rules.RemoveAt(Index);
+            rules.RemoveAt(Convert.ToInt32(remove));
             RuleList = rules;
-            return RedirectToAction("CreateRuleSet", new {model = viewModel });
+            TempData["name"] = viewModel.Name;
+            TempData["viewModel"] = JsonConvert.SerializeObject(viewModel);
+            return RedirectToAction("CreateRuleSet");
         }
     }
 }
