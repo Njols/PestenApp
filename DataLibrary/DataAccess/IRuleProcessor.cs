@@ -5,9 +5,9 @@ using System.Text;
 
 namespace DataLibrary.DataAccess
 {
-    public interface IRuleSetProcessor
+    public interface IRuleProcessor
     {
-        int AddRuleSet(RuleSet ruleSet, int userId);
-        List<RuleSet> GetRuleSets();
+        void AddRule(Rule rule, int ruleSetId);
+        List<Rule> GetRulesByRuleSet(int ruleSetId);
     }
 }

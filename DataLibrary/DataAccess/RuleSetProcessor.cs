@@ -3,53 +3,53 @@ using System.Collections.Generic;
 using System.Text;
 using Enums;
 using DataLibrary.Models;
+using System.Data.SqlClient;
 
 namespace DataLibrary.DataAccess
 {
     public  class RuleSetProcessor : IRuleSetProcessor
     {
-        SqlDataAccess _sqlDataAccess;
-        public void AddRuleSet (RuleSet ruleSet)
-        {
 
+        string _connectionString;
+        IRuleProcessor _ruleProcessor;
+        IAdditionalRuleProcessor _additionalRuleProcessor;
+        public RuleSetProcessor (string connectionString, IRuleProcessor ruleProcessor, IAdditionalRuleProcessor additionalRuleProcessor)
+        {
+            _connectionString = connectionString;
+            _ruleProcessor = ruleProcessor;
+            _additionalRuleProcessor = additionalRuleProcessor;
+        }
+        public int AddRuleSet (RuleSet ruleSet, int userId)
+        {
             string sql = @"INSERT INTO [RuleSet] (UserId, Name)
                              VALUES (@UserId, @Name)
                              SELECT SCOPE_IDENTITY()";
-
-            int ruleSetId = _sqlDataAccess.SaveData(sql, ruleSet);
-
-
-            foreach(Rule rule in ruleSet.Rules)
+            int ruleSetId;
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                string Card = rule.Card.ToString();
-                string RuleType = rule.RuleType.ToString();
-                string Amount = rule.RuleAmount.ToString();
-
-                string query = @"INSERT INTO [Rule] (Card,RuleType,Amount)
-                                 VALUES (@Card, @RuleType, @Amount)
-                                 SELECT SCOPE_IDENTITY()";
-                int ruleId = _sqlDataAccess.SaveData(query, rule);
-
-                string query2 = @"INSERT INTO [Rule_RuleSet] (RuleSetId, RuleId)
-                                  VALUES(@ruleSetId, @ruleId)";
-                _sqlDataAccess.SaveData(query2, rule);
+                conn.Open();
+                cmd.Parameters.AddWithValue("@UserId", userId);
+                cmd.Parameters.AddWithValue("@Name", ruleSet.Name);
+                ruleSetId = (int)cmd.ExecuteScalar();
             }
-
-            foreach (additionalRule rule in ruleSet.ExtraRules)
-            {
-                int AdditionalRuleId = (int)rule;
-
-                string query = @"INSERT INTO [AdditionalRule_RuleSet] (RuleSetId, AdditionalRuleId)
-                                 VALUES (@ruleSetId, @AdditonalRuleId)";
-                _sqlDataAccess.SaveData(query, rule);
-            }
-
+            return ruleSetId;
         }
 
         public List<RuleSet> GetRuleSets()
         {
             string sql = @"SELECT * FROM [RuleSet]";
-            return _sqlDataAccess.LoadList<RuleSet>(sql);
+            List<RuleSet> ruleSet = new List<RuleSet>();
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using(SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while(reader.Read())
+                {
+                    
+                }
+            }
         }
 
     }

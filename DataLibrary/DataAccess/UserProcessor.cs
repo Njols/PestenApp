@@ -4,41 +4,108 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Dapper;
+using Interfaces;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace DataLibrary.DataAccess
 {
     public class UserProcessor : IUserProcessor
     {
-        private ISqlDataAccess _sqlDataAccess;
-        public UserProcessor (ISqlDataAccess sqlDataAccess)
+        private string _connectionString;
+        public UserProcessor (string connectionString)
         {
-            _sqlDataAccess = sqlDataAccess;
+            _connectionString = connectionString;
         }
-        public int AddUser (User user)
+        public int AddUser (IUser user)
         {
             string sql = @"INSERT INTO [User] (Email, Username, Password) 
                            VALUES (@Email, @Username, @PasswordHash)";
-            return _sqlDataAccess.SaveData(sql, user);
+            int id;
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                conn.Open();
+                cmd.Parameters.AddWithValue("@Email", user.Email);
+                cmd.Parameters.AddWithValue("@Username", user.Username);
+                SqlParameter parameter = cmd.Parameters.Add("@PasswordHash", SqlDbType.VarBinary);
+                parameter.Value = user.PasswordHash;
+
+
+                id = (int)cmd.ExecuteScalar();
+            }
+            return id;
         }
         public List<User> GetUsers ()
         {
             string sql = @"SELECT Id, Username, Email, Password FROM [User]";
-            return _sqlDataAccess.LoadList<User>(sql);
+            List<User> users = new List<User>();
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while(reader.Read())
+                {
+                    User user = new User
+                    {
+                        Id = (int)reader["Id"],
+                        Username = (string)reader["Username"],
+                        Email = (string)reader["Email"],
+                        PasswordHash = (byte[])reader["Password"]
+                    };
+                    users.Add(user);
+                }
+            }
+            return users;
         }
         public User GetUserByEmail (string email)
         {
-            string sql = @"SELECT Id, Username, Email, Password FROM [User] WHERE Email = '" + email + "'";
-            if (_sqlDataAccess.LoadSingle<User>(sql) == null)
+            string sql = @"SELECT Id, Username, Email, Password FROM [User] WHERE Email = @Email";
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                return null;
+                conn.Open();
+                cmd.Parameters.AddWithValue("@Email", email);
+                SqlDataReader reader = cmd.ExecuteReader();
+                int id = (int)reader["Id"];
+                string username = (string)reader["Username"];
+                string _email = (string)reader["Email"];
+                byte[] passwordHash = (byte[])reader["Password"];
+                User user = new User
+                {
+                    Id = id,
+                    Username = username,
+                    Email = _email,
+                    PasswordHash = passwordHash
+                };
+                return user;
             }
-            return _sqlDataAccess.LoadSingle<User>(sql);
         }
         
         public User GetUserById (int id)
         {
-            string sql = @"SELECT Id, Username, Email, Password FROM [User] WHERE Id = @id";
-            return _sqlDataAccess.LoadList<User>(sql)[0];
+            string sql = @"SELECT Id, Username, Email, Password FROM [User] WHERE Id = @Id";
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                conn.Open();
+                cmd.Parameters.AddWithValue("@Id", id);
+                SqlDataReader reader = cmd.ExecuteReader();
+                int _id = (int)reader["Id"];
+                string username = (string)reader["Username"];
+                string email = (string)reader["Email"];
+                byte[] passwordHash = (byte[])reader["Password"];
+                User user = new User
+                {
+                    Id = id,
+                    Username = username,
+                    Email = email,
+                    PasswordHash = passwordHash
+                };
+                return user;
+            }
         }
+
     }
 }

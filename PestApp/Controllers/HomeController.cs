@@ -42,7 +42,8 @@ namespace PestApp.Controllers
             get
             {
                 if (_ruleList == null)
-                    _ruleList = HttpContext.Session.Get<List<Rule>>("RuleList");
+                    //_ruleList = HttpContext.Session.Get<List<Rule>>("RuleList");
+                    _ruleList = HttpContext.Session[""]
                 return _ruleList;
             }
             set

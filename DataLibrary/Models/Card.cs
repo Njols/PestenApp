@@ -1,5 +1,6 @@
 ﻿
 using Enums;
+using Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models
 {
-    public class Card
+    public class Card : ICard
     {
         public cardFace Face { get; set; }
         public Card (cardFace face)

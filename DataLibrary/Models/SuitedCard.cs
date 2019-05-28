@@ -1,14 +1,16 @@
 ﻿using Enums;
+using Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DataLibrary.Models
 {
-    public class SuitedCard : Card
+    public class SuitedCard : ISuitedCard
     {
+        public cardFace Face { get; set; }
         public cardSuit Suit { get; set; }
-        public override string GetCard()
+        public string GetCard()
         {
             return Face.ToString() + " of " + Suit.ToString();
         }
