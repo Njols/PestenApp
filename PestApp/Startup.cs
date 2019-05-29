@@ -57,6 +57,8 @@ namespace PestApp
             services.AddTransient(_ => Configuration.GetConnectionString("Default"));
             services.AddSingleton<IUserProcessor> (new UserProcessor(connectionString));
             services.AddSingleton<IRuleSetProcessor>(new RuleSetProcessor(connectionString));
+            services.AddSingleton<IRuleProcessor>(new RuleProcessor(connectionString));
+            services.AddSingleton<IAdditionalRuleProcessor>(new AdditionalRuleProcessor(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -11,22 +11,24 @@ namespace DataLibrary.Models
 
     public class RuleSet : IRuleSet
     {
-        public int Id { get; }
+        public int Id { get; set; }
         public List<additionalRule> ExtraRules { get; set; }
-        public User User { get; set; }
+        public int UserId { get; set; }
         public List<IRule> Rules { get; set; }
         public string Name { get; set; }
-        public RuleSet (User user, List<IRule> rules)
+        public RuleSet (List<IRule> rules)
         {
-            User = user;
             Rules = rules;
         }
-        public RuleSet(User user, List<IRule> rules, List<additionalRule> additionalRules, string name)
+        public RuleSet(List<IRule> rules, List<additionalRule> additionalRules, string name)
         {
             ExtraRules = additionalRules;
-            User = user;
             Rules = rules;
             Name = name;
+        }
+        public RuleSet()
+        {
+
         }
     }
 }

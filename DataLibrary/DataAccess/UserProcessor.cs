@@ -23,16 +23,18 @@ namespace DataLibrary.DataAccess
                            VALUES (@Email, @Username, @PasswordHash)";
             int id;
             using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                conn.Open();
-                cmd.Parameters.AddWithValue("@Email", user.Email);
-                cmd.Parameters.AddWithValue("@Username", user.Username);
-                SqlParameter parameter = cmd.Parameters.Add("@PasswordHash", SqlDbType.VarBinary);
-                parameter.Value = user.PasswordHash;
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    conn.Open();
+                    cmd.Parameters.AddWithValue("@Email", user.Email);
+                    cmd.Parameters.AddWithValue("@Username", user.Username);
+                    SqlParameter parameter = cmd.Parameters.Add("@PasswordHash", SqlDbType.VarBinary);
+                    parameter.Value = user.PasswordHash;
 
 
-                id = (int)cmd.ExecuteScalar();
+                    id = (int)cmd.ExecuteScalar();
+                }
             }
             return id;
         }
@@ -41,20 +43,22 @@ namespace DataLibrary.DataAccess
             string sql = @"SELECT Id, Username, Email, Password FROM [User]";
             List<User> users = new List<User>();
             using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                while(reader.Read())
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
-                    User user = new User
+                    conn.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
                     {
-                        Id = (int)reader["Id"],
-                        Username = (string)reader["Username"],
-                        Email = (string)reader["Email"],
-                        PasswordHash = (byte[])reader["Password"]
-                    };
-                    users.Add(user);
+                        User user = new User
+                        {
+                            Id = (int)reader["Id"],
+                            Username = (string)reader["Username"],
+                            Email = (string)reader["Email"],
+                            PasswordHash = (byte[])reader["Password"]
+                        };
+                        users.Add(user);
+                    }
                 }
             }
             return users;
@@ -63,23 +67,25 @@ namespace DataLibrary.DataAccess
         {
             string sql = @"SELECT Id, Username, Email, Password FROM [User] WHERE Email = @Email";
             using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                conn.Open();
-                cmd.Parameters.AddWithValue("@Email", email);
-                SqlDataReader reader = cmd.ExecuteReader();
-                int id = (int)reader["Id"];
-                string username = (string)reader["Username"];
-                string _email = (string)reader["Email"];
-                byte[] passwordHash = (byte[])reader["Password"];
-                User user = new User
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
-                    Id = id,
-                    Username = username,
-                    Email = _email,
-                    PasswordHash = passwordHash
-                };
-                return user;
+                    conn.Open();
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    int id = (int)reader["Id"];
+                    string username = (string)reader["Username"];
+                    string _email = (string)reader["Email"];
+                    byte[] passwordHash = (byte[])reader["Password"];
+                    User user = new User
+                    {
+                        Id = id,
+                        Username = username,
+                        Email = _email,
+                        PasswordHash = passwordHash
+                    };
+                    return user;
+                }
             }
         }
         
@@ -87,23 +93,25 @@ namespace DataLibrary.DataAccess
         {
             string sql = @"SELECT Id, Username, Email, Password FROM [User] WHERE Id = @Id";
             using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                conn.Open();
-                cmd.Parameters.AddWithValue("@Id", id);
-                SqlDataReader reader = cmd.ExecuteReader();
-                int _id = (int)reader["Id"];
-                string username = (string)reader["Username"];
-                string email = (string)reader["Email"];
-                byte[] passwordHash = (byte[])reader["Password"];
-                User user = new User
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
-                    Id = id,
-                    Username = username,
-                    Email = email,
-                    PasswordHash = passwordHash
-                };
-                return user;
+                    conn.Open();
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    int _id = (int)reader["Id"];
+                    string username = (string)reader["Username"];
+                    string email = (string)reader["Email"];
+                    byte[] passwordHash = (byte[])reader["Password"];
+                    User user = new User
+                    {
+                        Id = id,
+                        Username = username,
+                        Email = email,
+                        PasswordHash = passwordHash
+                    };
+                    return user;
+                }
             }
         }
 

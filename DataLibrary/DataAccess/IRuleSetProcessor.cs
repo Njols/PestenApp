@@ -7,7 +7,7 @@ namespace DataLibrary.DataAccess
 {
     public interface IRuleSetProcessor
     {
-        int AddRuleSet(RuleSet ruleSet, int userId);
+        int AddRuleSet(RuleSet ruleSet);
         List<RuleSet> GetRuleSets();
     }
 }

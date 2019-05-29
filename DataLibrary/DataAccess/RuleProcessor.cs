@@ -15,7 +15,7 @@ namespace DataLibrary.DataAccess
         {
             _connectionString = connectionString;
         }
-        public void AddRule (Rule rule, int ruleSetId)
+        public void AddRule (IRule rule, int ruleSetId)
         {
             string query = @"INSERT INTO [Rule] (Card,RuleType,Amount)
                                  VALUES (@Card, @RuleType, @Amount)";
@@ -42,7 +42,7 @@ namespace DataLibrary.DataAccess
             }
 
         }
-        public List<Rule> GetRulesByRuleSet(int ruleSetId)
+        public List<IRule> GetRulesByRuleSet(int ruleSetId)
         {
             string query = @"SELECT RuleId
                                 FROM [Rule_RuleSet]
@@ -60,14 +60,14 @@ namespace DataLibrary.DataAccess
                     ruleIds.Add(ruleId);
                 }
             }
-            List<Rule> rules = new List<Rule>();
+            List<IRule> rules = new List<IRule>();
             foreach (int id in ruleIds)
             {
                 rules.Add(GetRuleById(id));
             }
             return rules;
         }
-        public Rule GetRuleById(int ruleId)
+        public IRule GetRuleById(int ruleId)
         {
             string query2 = @"SELECT CardFace,CardSuit, RuleType, RuleAmount
                                 FROM [Rule]

@@ -13,6 +13,7 @@ namespace PestApp.Models
         public List<additionalRule> ExtraRules { get; set; }
         public List<IRule> Rules { get; set; }
         public string Name { get; set; }
+        public int UserId { get; set; }
         public RuleSet ( List<IRule> rules)
         {
             Rules = rules;

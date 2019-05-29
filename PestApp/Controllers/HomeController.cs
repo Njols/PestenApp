@@ -20,12 +20,16 @@ namespace PestApp.Controllers
 
         private IUserProcessor _userProcessor;
         private IRuleSetProcessor _ruleSetProcessor;
-        public HomeController (IUserProcessor userProcessor, IRuleSetProcessor ruleSetProcessor)
+        private IRuleProcessor _ruleProcessor;
+        private IAdditionalRuleProcessor _additionalRuleProcessor;
+        public HomeController (IUserProcessor userProcessor, IRuleSetProcessor ruleSetProcessor, IRuleProcessor ruleProcessor, IAdditionalRuleProcessor additionalRuleProcessor)
         {
             _userProcessor = userProcessor;
             _ruleSetProcessor = ruleSetProcessor;
+            _ruleProcessor = ruleProcessor;
+            _additionalRuleProcessor = additionalRuleProcessor;
             _userLogic = new UserLogic(_userProcessor, _ruleSetProcessor);
-            _ruleSetLogic = new RuleSetLogic(_userProcessor, _ruleSetProcessor);
+            _ruleSetLogic = new RuleSetLogic(_userProcessor, _ruleSetProcessor, _ruleProcessor, _additionalRuleProcessor);
 
         }
         private UserLogic _userLogic;
