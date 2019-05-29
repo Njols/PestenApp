@@ -13,11 +13,11 @@ namespace DataLibrary.DataAccess
         string _connectionString;
         IRuleProcessor _ruleProcessor;
         IAdditionalRuleProcessor _additionalRuleProcessor;
-        public RuleSetProcessor (string connectionString, IRuleProcessor ruleProcessor, IAdditionalRuleProcessor additionalRuleProcessor)
+        public RuleSetProcessor (string connectionString)
         {
             _connectionString = connectionString;
-            _ruleProcessor = ruleProcessor;
-            _additionalRuleProcessor = additionalRuleProcessor;
+            /*_ruleProcessor = ruleProcessor;
+            _additionalRuleProcessor = additionalRuleProcessor;*/
         }
         public int AddRuleSet (RuleSet ruleSet, int userId)
         {
@@ -50,6 +50,7 @@ namespace DataLibrary.DataAccess
                     
                 }
             }
+            return ruleSet;
         }
 
     }

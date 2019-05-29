@@ -55,7 +55,6 @@ namespace PestApp
             var connectionString = Configuration.GetConnectionString("Default");
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddTransient(_ => Configuration.GetConnectionString("Default"));
-            services.AddSingleton<ISqlDataAccess>(new SqlDataAccess(connectionString));
             services.AddSingleton<IUserProcessor> (new UserProcessor(connectionString));
             services.AddSingleton<IRuleSetProcessor>(new RuleSetProcessor(connectionString));
         }

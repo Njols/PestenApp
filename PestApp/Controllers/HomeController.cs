@@ -11,6 +11,7 @@ using Logic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Enums;
+using Interfaces;
 
 namespace PestApp.Controllers
 {
@@ -42,8 +43,8 @@ namespace PestApp.Controllers
             get
             {
                 if (_ruleList == null)
-                    //_ruleList = HttpContext.Session.Get<List<Rule>>("RuleList");
-                    _ruleList = HttpContext.Session[""]
+                    _ruleList = HttpContext.Session.Get<List<Rule>>("RuleList");
+                    
                 return _ruleList;
             }
             set
@@ -177,7 +178,7 @@ namespace PestApp.Controllers
         public IActionResult SaveRuleSet (CreateRuleSetViewModel viewModel)
         {
             string email = User.Claims.First().Value;
-            List<DataLibrary.Models.Rule> ruleList = new List<DataLibrary.Models.Rule>();
+            List<IRule> ruleList = new List<IRule>();
             foreach (Rule rule in RuleList)
             {
                 if (rule.Card is SuitedCard)

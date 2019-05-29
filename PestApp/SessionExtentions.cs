@@ -11,15 +11,23 @@ namespace PestApp
     {
         public static void Set<T>(this ISession session, string key, T value)
         {
-            session.SetString(key, JsonConvert.SerializeObject(value));
+            JsonSerializerSettings _settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            };
+            session.SetString(key, JsonConvert.SerializeObject(value, _settings));
         }
 
         public static T Get<T>(this ISession session, string key)
         {
+            JsonSerializerSettings _settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            };
             var value = session.GetString(key);
 
             return value== null ? default(T):
-                JsonConvert.DeserializeObject<T>(value);
+                JsonConvert.DeserializeObject<T>(value, _settings);
         }
     }
 }

@@ -4,6 +4,7 @@ using DataLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Interfaces;
 
 namespace Logic
 {
@@ -18,12 +19,12 @@ namespace Logic
             _ruleSetProcessor = ruleSetProcessor;
         }
 
-        public void CreateRuleSet(List<Rule> rules, string email, List<additionalRule> additionalRules, string name)
+        public void CreateRuleSet(List<IRule> rules, string email, List<additionalRule> additionalRules, string name)
         {
             User user = _userProcessor.GetUserByEmail(email);
 
             RuleSet ruleSet = new RuleSet(user, rules, additionalRules, name);
-            _ruleSetProcessor.AddRuleSet(ruleSet);
+            _ruleSetProcessor.AddRuleSet(ruleSet, user.Id);
         }
         public List<RuleSet> GetRuleSets()
         {
