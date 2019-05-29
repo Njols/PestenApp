@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataLibrary.DataAccess;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -42,8 +43,13 @@ namespace PestApp
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    options.AccessDeniedPath = new PathString("/Home/");
+                    options.LoginPath = new PathString("/Home/CreateRuleSet/");
+                    options.LogoutPath = new PathString("/Home/");
+                });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSession(options =>
@@ -52,7 +58,7 @@ namespace PestApp
                 options.IdleTimeout = TimeSpan.FromSeconds(10);
                 options.Cookie.IsEssential = true;
             });
-            var connectionString = Configuration.GetConnectionString("Default");
+            string connectionString = Configuration.GetConnectionString("Default");
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddTransient(_ => Configuration.GetConnectionString("Default"));
             services.AddSingleton<IUserProcessor> (new UserProcessor(connectionString));

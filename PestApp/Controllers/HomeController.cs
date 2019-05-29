@@ -115,15 +115,40 @@ namespace PestApp.Controllers
             {
                 List<Claim> claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Name, user.Username)
+                    new Claim(ClaimTypes.Email, user.Email)
                 };
                 ClaimsIdentity identity = new ClaimsIdentity(claims, "user");
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(principal);
-                return RedirectToAction("Index");
+                return RedirectToAction("CreateRuleSet");
             }
             return View();
+        }
+        public IActionResult LogIn()
+        {
+            LogInViewModel viewModel = new LogInViewModel();
+            return View(viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogIn(LogInViewModel viewModel)
+        {
+            if (_userLogic.PasswordMatches(viewModel.Email, viewModel.Password))
+            {
+                List<Claim> claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Email, viewModel.Email)
+                };
+                ClaimsIdentity identity = new ClaimsIdentity(claims, "user");
+                ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+                await HttpContext.SignInAsync(principal);
+                return RedirectToAction("CreateRuleSet");
+            }
+            else
+            {
+                return View();
+            }
+
         }
         public IActionResult ViewUsers ()
         {

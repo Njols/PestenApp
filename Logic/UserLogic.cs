@@ -38,5 +38,18 @@ namespace Logic
             }
             return false;
         }
+        public bool PasswordMatches(string email, string password)
+        {
+            User user = GetUserByEmail(email);
+            if (user != null)
+            {
+                PasswordHasher hasher = new PasswordHasher(user.PasswordHash);
+                return hasher.Verify(password);
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

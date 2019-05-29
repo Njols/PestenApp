@@ -21,7 +21,7 @@ namespace DataLibrary.DataAccess
         {
             string sql = @"INSERT INTO [User] (Email, Username, Password) 
                            VALUES (@Email, @Username, @PasswordHash)";
-            int id;
+            int id = 0;
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -33,7 +33,7 @@ namespace DataLibrary.DataAccess
                     parameter.Value = user.PasswordHash;
 
 
-                    id = (int)cmd.ExecuteScalar();
+                    cmd.ExecuteScalar();
                 }
             }
             return id;
@@ -65,7 +65,7 @@ namespace DataLibrary.DataAccess
         }
         public User GetUserByEmail (string email)
         {
-            string sql = @"SELECT Id, Username, Email, Password FROM [User] WHERE Email = @Email";
+            string sql = @"SELECT Id, Username, Email, Password FROM dbo.[User] WHERE Email = @Email";
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -73,6 +73,10 @@ namespace DataLibrary.DataAccess
                     conn.Open();
                     cmd.Parameters.AddWithValue("@Email", email);
                     SqlDataReader reader = cmd.ExecuteReader();
+                    if (!reader.Read())
+                    {
+                        return null;
+                    }
                     int id = (int)reader["Id"];
                     string username = (string)reader["Username"];
                     string _email = (string)reader["Email"];
