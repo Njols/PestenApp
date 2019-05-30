@@ -15,6 +15,7 @@ namespace PestApp.ViewModels
         public SelectList CardSuit = new SelectList(Enum.GetNames(typeof(cardSuit)));
         public SelectList CardFace = new SelectList(Enum.GetNames(typeof(cardFace)));
         public SelectList RuleType = new SelectList(Enum.GetNames(typeof(ruleType)));
+        public SelectList AdditionalRules = new SelectList(Enum.GetNames(typeof(additionalRule)));
         [BindRequired]
         public cardFace Face { get; set; }
         [BindRequired]
@@ -25,6 +26,12 @@ namespace PestApp.ViewModels
         public bool CheckBox { get; set; }
         [BindRequired]
         public string Name { get; set; }
-        public IEnumerable<Rule> Rules;
+        public additionalRule AdditionalRule { get; set; }
+        public IEnumerable<Rule> Rules { get; set; }
+        public IEnumerable<additionalRule> ExtraRules { get; set; }
+        public CreateRuleSetViewModel ()
+        {
+            ExtraRules = new List<additionalRule>();
+        }
     }
 }

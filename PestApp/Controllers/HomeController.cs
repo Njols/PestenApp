@@ -117,7 +117,7 @@ namespace PestApp.Controllers
                 {
                     new Claim(ClaimTypes.Email, user.Email)
                 };
-                ClaimsIdentity identity = new ClaimsIdentity(claims, "user");
+                ClaimsIdentity identity = new ClaimsIdentity(claims, "login");
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(principal);
                 return RedirectToAction("CreateRuleSet");
@@ -139,7 +139,7 @@ namespace PestApp.Controllers
                 {
                     new Claim(ClaimTypes.Email, viewModel.Email)
                 };
-                ClaimsIdentity identity = new ClaimsIdentity(claims, "user");
+                ClaimsIdentity identity = new ClaimsIdentity(claims, "login");
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(principal);
                 return RedirectToAction("CreateRuleSet");
@@ -180,7 +180,11 @@ namespace PestApp.Controllers
             {
                 RuleList = MockDb;
             }
-
+            if (AdditionalRules == null)
+            {
+                AdditionalRules = new List<additionalRule>();
+            }
+            List<additionalRule> additionalRules = AdditionalRules;
             List<Rule> rules = new List<Rule>();
             rules.AddRange(RuleList);
             if (command == "Add Rule")
@@ -196,40 +200,52 @@ namespace PestApp.Controllers
                 }
                 rules.Add((new Rule(card, model.Type, 0)));
             }
+            else if (command == "Add Extra Rule")
+            {
+                additionalRules.Add(model.AdditionalRule);
+            }
+            else if (command.Substring(0, 11) == "DeleteRule")
+            {
+                rules.RemoveAt(Convert.ToInt32(command.Substring(12)));
+            }
             else
             {
-                rules.RemoveAt(Convert.ToInt32(command));
+                additionalRules.RemoveAt(Convert.ToInt32(command.Substring(17)));
             }
+            AdditionalRules = additionalRules;
             RuleList = rules;
             model.Rules = rules;
             return View(model);
         }
         public IActionResult SaveRuleSet (CreateRuleSetViewModel viewModel)
         {
-            string email = User.Claims.First().Value;
-            List<IRule> ruleList = new List<IRule>();
-            foreach (Rule rule in RuleList)
+            if (User.Identity.IsAuthenticated)
             {
-                if (rule.Card is SuitedCard)
+                string email = User.Claims.First().Value;
+                List<IRule> ruleList = new List<IRule>();
+                foreach (Rule rule in RuleList)
                 {
-                    SuitedCard suitedCard = (SuitedCard)rule.Card;
-                    DataLibrary.Models.SuitedCard card = new DataLibrary.Models.SuitedCard
+                    if (rule.Card is SuitedCard)
                     {
-                        Face = rule.Card.Face,
-                        Suit = suitedCard.Suit
-                    };
-                    ruleList.Add(new DataLibrary.Models.Rule(card, rule.Type, 0));
-                }
-                else
-                {
-                    DataLibrary.Models.Card card = new DataLibrary.Models.Card
+                        SuitedCard suitedCard = (SuitedCard)rule.Card;
+                        DataLibrary.Models.SuitedCard card = new DataLibrary.Models.SuitedCard
+                        {
+                            Face = rule.Card.Face,
+                            Suit = suitedCard.Suit
+                        };
+                        ruleList.Add(new DataLibrary.Models.Rule(card, rule.Type, 0));
+                    }
+                    else
                     {
-                        Face = rule.Card.Face
-                    };
-                    ruleList.Add(new DataLibrary.Models.Rule(card, rule.Type, 0));
+                        DataLibrary.Models.Card card = new DataLibrary.Models.Card
+                        {
+                            Face = rule.Card.Face
+                        };
+                        ruleList.Add(new DataLibrary.Models.Rule(card, rule.Type, 0));
+                    }
                 }
+                _ruleSetLogic.CreateRuleSet(ruleList, email, AdditionalRules, viewModel.Name);
             }
-            _ruleSetLogic.CreateRuleSet(ruleList, email, AdditionalRules, viewModel.Name);
             return RedirectToAction("CreateRuleSet");
         }
     }
