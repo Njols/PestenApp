@@ -12,6 +12,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Enums;
 using Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PestApp.Controllers
 {
@@ -35,19 +36,22 @@ namespace PestApp.Controllers
         private UserLogic _userLogic;
         private RuleSetLogic _ruleSetLogic;
 
-        private static List<Rule> MockDb = new List<Rule>
-        {
-            new Rule(new SuitedCard(cardFace.Ace, cardSuit.Diamonds), ruleType.changeSuits, 0),
-            new Rule(new SuitedCard(cardFace.Five, cardSuit.Spades), ruleType.changeSuits, 0),
-            new Rule(new Card(cardFace.Jack), ruleType.changeSuits, 0)
-        };
         private List<Rule> _ruleList;
         private List<Rule> RuleList
         {
             get
             {
                 if (_ruleList == null)
-                    _ruleList = HttpContext.Session.Get<List<Rule>>("RuleList");
+                {
+                    if (HttpContext.Session.Get<List<Rule>>("RuleList") != null)
+                    {
+                        _ruleList = HttpContext.Session.Get<List<Rule>>("RuleList");
+                    }
+                    else
+                    {
+                        _ruleList = new List<Rule>();
+                    }
+                }
                     
                 return _ruleList;
             }
@@ -58,12 +62,21 @@ namespace PestApp.Controllers
             }
         }
         private List<additionalRule> _additionalRules;
-        private List<additionalRule> AdditionalRules
+        private List<additionalRule> AdditionalRuleList
         {
             get
             {
                 if (_additionalRules == null)
-                    _additionalRules = HttpContext.Session.Get<List<additionalRule>>("AdditionalRuleList");
+                {
+                    if (HttpContext.Session.Get<List<additionalRule>>("AdditionalRuleList") != null)
+                    {
+                        _additionalRules = HttpContext.Session.Get<List<additionalRule>>("AdditionalRuleList");
+                    }
+                    else
+                    {
+                        _additionalRules = new List<additionalRule>();
+                    }
+                }
                 return _additionalRules;
             }
             set
@@ -162,13 +175,10 @@ namespace PestApp.Controllers
         }
         public IActionResult CreateRuleSet ()
         {
-            if (RuleList == null)
-            {
-                RuleList = MockDb;
-            }
             CreateRuleSetViewModel model = new CreateRuleSetViewModel
             {
-                Rules = RuleList
+                Rules = RuleList,
+                AdditionalRules = AdditionalRuleList
             };
             return View(model);
         }
@@ -176,17 +186,8 @@ namespace PestApp.Controllers
         [HttpPost()]
         public IActionResult CreateRuleSet (CreateRuleSetViewModel model, string command)
         {
-            if (RuleList == null)
-            {
-                RuleList = MockDb;
-            }
-            if (AdditionalRules == null)
-            {
-                AdditionalRules = new List<additionalRule>();
-            }
-            List<additionalRule> additionalRules = AdditionalRules;
-            List<Rule> rules = new List<Rule>();
-            rules.AddRange(RuleList);
+            List<additionalRule> additionalRules = AdditionalRuleList;
+            List<Rule> rules = RuleList;
             if (command == "Add Rule")
             {
                 Card card = new Card();
@@ -210,11 +211,13 @@ namespace PestApp.Controllers
             }
             else
             {
-                additionalRules.RemoveAt(Convert.ToInt32(command.Substring(17)));
+                additionalRules.RemoveAt(Convert.ToInt32(command.Substring(16)));
             }
-            AdditionalRules = additionalRules;
+            AdditionalRuleList = additionalRules;
             RuleList = rules;
             model.Rules = rules;
+            model.AdditionalRules = additionalRules;
+            model.AdditionalRuleSelectList = new SelectList(Enum.GetNames(typeof(additionalRule)).Where(x => !AdditionalRuleList.Contains((additionalRule)Enum.Parse(typeof(additionalRule), x))));
             return View(model);
         }
         public IActionResult SaveRuleSet (CreateRuleSetViewModel viewModel)
@@ -244,7 +247,7 @@ namespace PestApp.Controllers
                         ruleList.Add(new DataLibrary.Models.Rule(card, rule.Type, 0));
                     }
                 }
-                _ruleSetLogic.CreateRuleSet(ruleList, email, AdditionalRules, viewModel.Name);
+                _ruleSetLogic.CreateRuleSet(ruleList, email, AdditionalRuleList, viewModel.Name);
             }
             return RedirectToAction("CreateRuleSet");
         }

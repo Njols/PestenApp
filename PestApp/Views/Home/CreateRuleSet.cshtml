@@ -9,13 +9,13 @@
 @using (Html.BeginForm("CreateRuleSet", "Home", FormMethod.Post))
 {
     <div class="form-group">
-        @Html.DropDownListFor(m => m.Face, Model.CardFace)
+        @Html.DropDownListFor(m => m.Face, Model.CardFaceSelectList)
     </div>
     <div class="form-group" id="cardSuitContainer" style="display:none">
-        @Html.DropDownListFor(m => m.Suit, Model.CardSuit)
+        @Html.DropDownListFor(m => m.Suit, Model.CardSuitSelectList)
     </div>
     <div class="form-group">
-        @Html.DropDownListFor(m => m.Type, Model.RuleType)
+        @Html.DropDownListFor(m => m.Type, Model.RuleTypeSelectList)
     </div>
     var Index = 0;
     <div id="id">
@@ -33,8 +33,8 @@
         @{
             var index = 0;
         }
-        @Html.DropDownListFor(m => m.AdditionalRule, Model.AdditionalRules)
-        @foreach(additionalRule additionalRule in Model.ExtraRules)
+        @Html.DropDownListFor(m => m.AdditionalRule, Model.AdditionalRuleSelectList)
+        @foreach(additionalRule additionalRule in Model.AdditionalRules)
         {
             <p>
             @additionalRule
