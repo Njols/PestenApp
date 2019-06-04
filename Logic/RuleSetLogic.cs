@@ -1,6 +1,6 @@
 ﻿using DataLibrary.DataAccess;
 using Enums;
-using DataLibrary.Models;
+using DataLibrary.Dbo;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -37,9 +37,9 @@ namespace Logic
             };
             _ruleSetProcessor.AddRuleSet(ruleSet);
         }
-        public List<RuleSet> GetRuleSets()
+        public List<IRuleSet> GetRuleSets()
         {
-            List<RuleSet> incompleteRuleSets = _ruleSetProcessor.GetRuleSets();
+            List<IRuleSet> incompleteRuleSets = _ruleSetProcessor.GetRuleSets();
             foreach(RuleSet ruleSet in incompleteRuleSets)
             {
                 ruleSet.Rules = _ruleProcessor.GetRulesByRuleSet(ruleSet.Id);
@@ -47,5 +47,40 @@ namespace Logic
             }
             return incompleteRuleSets;
         }
+
+        public IRuleSet GetRuleSetById (int id)
+        {
+            RuleSet incompleteRuleSet = (RuleSet)_ruleSetProcessor.GetRuleSetById(id);
+            RuleSet completeRuleSet = CompleteRuleSet(incompleteRuleSet);
+            return completeRuleSet;
+        }
+
+        public List<IRuleSet> GetRuleSetsOrderedByRules ()
+        {
+            List<IRuleSet> incompleteRuleSets = _ruleSetProcessor.GetRuleSetsByAmountOfRules();
+            List<IRuleSet> completeRuleSets = new List<IRuleSet>();
+            foreach(IRuleSet ruleSet in incompleteRuleSets)
+            {
+                RuleSet completeRuleSet = CompleteRuleSet(ruleSet);
+                completeRuleSets.Add(completeRuleSet);
+            }
+            return completeRuleSets;
+        }
+
+        public RuleSet CompleteRuleSet (IRuleSet incompleteRuleSet)
+        {
+            RuleSet ruleSet = (RuleSet)incompleteRuleSet;
+                List<IRule> rules = _ruleProcessor.GetRulesByRuleSet(ruleSet.Id);
+                List<additionalRule> additionalRules = _additionalRuleProcessor.GetAdditionalRulesByRuleSet(ruleSet.Id);
+                RuleSet completeRuleSet = new RuleSet
+                {
+                    Id = ruleSet.Id,
+                    UserId = ruleSet.UserId,
+                    Rules = rules,
+                    ExtraRules = additionalRules
+                };
+            return completeRuleSet;
+        }
+
     }
 }

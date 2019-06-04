@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using Enums;
-using DataLibrary.Models;
+using DataLibrary.Dbo;
 using System.Data.SqlClient;
+using Interfaces;
 
 namespace DataLibrary.DataAccess
 {
@@ -15,7 +16,7 @@ namespace DataLibrary.DataAccess
         {
             _connectionString = connectionString;
         }
-        public int AddRuleSet (RuleSet ruleSet)
+        public int AddRuleSet (IRuleSet ruleSet)
         {
             string sql = @"INSERT INTO [RuleSet] (UserId, Name)
                              VALUES (@UserId, @Name)
@@ -32,10 +33,10 @@ namespace DataLibrary.DataAccess
             return ruleSetId;
         }
 
-        public List<RuleSet> GetRuleSets()
+        public List<IRuleSet> GetRuleSets()
         {
             string sql = @"SELECT * FROM [RuleSet]";
-            List<RuleSet> ruleSets = new List<RuleSet>();
+            List<IRuleSet> ruleSets = new List<IRuleSet>();
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -50,6 +51,61 @@ namespace DataLibrary.DataAccess
                             UserId = (int)reader["UserId"],
                             Name = (string)reader["Name"]
                         };
+                    }
+                }
+            }
+            return ruleSets;
+        }
+
+        public IRuleSet GetRuleSetById(int ruleSetId)
+        {
+            string sql = @"SELECT * FROM [RuleSet] WHERE Id = @RuleSetId";
+            RuleSet ruleSet;
+            using(SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                using(SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    conn.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        ruleSet = new RuleSet
+                        {
+                            Id = (int)reader["Id"],
+                            Name = (string)reader["Name"],
+                            UserId = (int)reader["UserId"]
+                        };
+                        return ruleSet;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+        public List<IRuleSet> GetRuleSetsByAmountOfRules()
+        {
+            string sql = @"SELECT * FROM [RuleSet] 
+                           FULL OUTER JOIN [Rule_RuleSet] ON [Rule_RuleSet].RuleSetId = [RuleSet].Id 
+                           FULL OUTER JOIN [Rule] ON [Rule].Id = [Rule_RuleSet].RuleId 
+                           ORDER BY COUNT(Rule)";
+            List<IRuleSet> ruleSets = new List<IRuleSet>();
+            using(SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                using(SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    conn.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while(reader.Read())
+                    {
+                        RuleSet ruleSet = new RuleSet
+                        {
+                            Id = (int)reader["Id"],
+                            UserId = (int)reader["UserId"],
+                            Name = (string)reader["Name"]
+                        };
+                        ruleSets.Add(ruleSet);
                     }
                 }
             }

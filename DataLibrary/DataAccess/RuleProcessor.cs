@@ -1,4 +1,4 @@
-﻿using DataLibrary.Models;
+﻿using DataLibrary.Dbo;
 using Enums;
 using Interfaces;
 using System;
@@ -17,28 +17,22 @@ namespace DataLibrary.DataAccess
         }
         public void AddRule (IRule rule, int ruleSetId)
         {
-            string query = @"INSERT INTO [Rule] (Card,RuleType,Amount)
-                                 VALUES (@Card, @RuleType, @Amount)";
-            int id;
-            using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            string query = "CreateRule";
+            using(SqlConnection conn = new SqlConnection(_connectionString))
             {
-                conn.Open();
-                cmd.Parameters.AddWithValue("@Card", rule.Card.GetCard());
-                cmd.Parameters.AddWithValue("@RuleType", (int)rule.Type);
-                cmd.Parameters.AddWithValue("@Amount", rule.RuleAmount);
-
-                id = (int)cmd.ExecuteScalar();
-            }
-            string sql = @"INSERT INTO [Rule_RuleSet] (RuleSetId, RuleId)
-                                  VALUES(@RuleSetId, @RuleId)";
-            using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                conn.Open();
-                cmd.Parameters.AddWithValue("@RuleSetId", ruleSetId);
-                cmd.Parameters.AddWithValue("@RuleId", id);
-                cmd.ExecuteScalar();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    conn.Open();
+                    cmd.Parameters.AddWithValue("@CardFace", (int)rule.Card.Face);
+                    cmd.Parameters.AddWithValue("@RuleType", (int)rule.Type);
+                    cmd.Parameters.AddWithValue("@Amount", (int)rule.RuleAmount);
+                    if (rule.Card is SuitedCard)
+                    {
+                        SuitedCard card = (SuitedCard)rule.Card;
+                        cmd.Parameters.AddWithValue("CardSuit", (int)card.Suit);
+                    }
+                    cmd.ExecuteNonQuery();
+                }
             }
 
         }

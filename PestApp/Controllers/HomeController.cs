@@ -231,25 +231,31 @@ namespace PestApp.Controllers
                     if (rule.Card is SuitedCard)
                     {
                         SuitedCard suitedCard = (SuitedCard)rule.Card;
-                        DataLibrary.Models.SuitedCard card = new DataLibrary.Models.SuitedCard
+                        DataLibrary.Dbo.SuitedCard card = new DataLibrary.Dbo.SuitedCard
                         {
                             Face = rule.Card.Face,
                             Suit = suitedCard.Suit
                         };
-                        ruleList.Add(new DataLibrary.Models.Rule(card, rule.Type, 0));
+                        ruleList.Add(new DataLibrary.Dbo.Rule(card, rule.Type, 0));
                     }
                     else
                     {
-                        DataLibrary.Models.Card card = new DataLibrary.Models.Card
+                        DataLibrary.Dbo.Card card = new DataLibrary.Dbo.Card
                         {
                             Face = rule.Card.Face
                         };
-                        ruleList.Add(new DataLibrary.Models.Rule(card, rule.Type, 0));
+                        ruleList.Add(new DataLibrary.Dbo.Rule(card, rule.Type, 0));
                     }
                 }
                 _ruleSetLogic.CreateRuleSet(ruleList, email, AdditionalRuleList, viewModel.Name);
             }
             return RedirectToAction("CreateRuleSet");
+        }
+
+        public IActionResult ViewRuleSet (int ruleSetId)
+        {
+            RuleSet ruleSet = (RuleSet)_ruleSetLogic.GetRuleSetById(ruleSetId);
+            return View(ruleSet);
         }
     }
 }

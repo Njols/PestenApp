@@ -1,7 +1,7 @@
 ﻿using Enums;
 using Interfaces;
 
-namespace DataLibrary.Models
+namespace DataLibrary.Dbo
 {
     public class Rule : IRule
     {

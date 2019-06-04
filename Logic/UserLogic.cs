@@ -1,5 +1,5 @@
 ﻿using DataLibrary.DataAccess;
-using DataLibrary.Models;
+using DataLibrary.Dbo;
 using System;
 
 namespace Logic
