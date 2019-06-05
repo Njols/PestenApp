@@ -26,6 +26,7 @@ namespace DataLibrary.DataAccess
                     cmd.Parameters.AddWithValue("@CardFace", (int)rule.Card.Face);
                     cmd.Parameters.AddWithValue("@RuleType", (int)rule.Type);
                     cmd.Parameters.AddWithValue("@Amount", (int)rule.RuleAmount);
+                    cmd.Parameters.AddWithValue("@RuleSetId", (int)ruleSetId);
                     if (rule.Card is SuitedCard)
                     {
                         SuitedCard card = (SuitedCard)rule.Card;

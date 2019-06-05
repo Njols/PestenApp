@@ -89,7 +89,7 @@ namespace DataLibrary.DataAccess
             string sql = @"SELECT * FROM [RuleSet] 
                            FULL OUTER JOIN [Rule_RuleSet] ON [Rule_RuleSet].RuleSetId = [RuleSet].Id 
                            FULL OUTER JOIN [Rule] ON [Rule].Id = [Rule_RuleSet].RuleId 
-                           ORDER BY COUNT(Rule)";
+                           ORDER BY COUNT([Rule].RuleId)";
             List<IRuleSet> ruleSets = new List<IRuleSet>();
             using(SqlConnection conn = new SqlConnection(_connectionString))
             {
