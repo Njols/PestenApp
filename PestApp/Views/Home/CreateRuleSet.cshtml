@@ -8,44 +8,59 @@
 @model CreateRuleSetViewModel
 @using (Html.BeginForm("CreateRuleSet", "Home", FormMethod.Post))
 {
+    <select name="Type">
+        @foreach (DropDownListItem item in Model.DropDownListItems)
+        {
+            @if (item.HasAmount)
+            {
+                <option class="hasAmount" value="@item.Name" onclick="hideAndClearAmountBox()">@item.Name</option>
+            }
+            else
+            {
+                <option value="@item.Name">@item.Name</option>
+            }
+        }
+    </select>
+     
+        var Index = 0;
+    
+    <div id="id">
+        @foreach (Rule rule in Model.Rules)
+        {
+            <p>
+                @rule.Card.GetCard() @rule.RuleType
+                <button name="command" value="DeleteRule @Index">X</button>
+            </p>
+            Index++;
+        }
+    </div>
+
+    <input id="amountBox" type="number" name="RuleAmount" min="0"/>
+
     <div class="form-group">
         @Html.DropDownListFor(m => m.Face, Model.CardFaceSelectList)
     </div>
     <div class="form-group" id="cardSuitContainer" style="display:none">
         @Html.DropDownListFor(m => m.Suit, Model.CardSuitSelectList)
     </div>
-    <div class="form-group">
-        @Html.DropDownListFor(m => m.Type, Model.RuleTypeSelectList)
-    </div>
-    var Index = 0;
-    <div id="id">
-        @foreach (Rule rule in Model.Rules)
-        {
-        <p>
-            @rule.Card.GetCard() @rule.Type
-            <button name="command" value="DeleteRule @Index">X</button>
-        </p>
-            Index++;
-        }
 
-    </div>
     <div id="divje">
         @{
             var index = 0;
         }
         @Html.DropDownListFor(m => m.AdditionalRule, Model.AdditionalRuleSelectList)
-        @foreach(additionalRule additionalRule in Model.AdditionalRules)
+        @foreach (additionalRule additionalRule in Model.AdditionalRules)
         {
             <p>
-            @additionalRule
-            <button name="command" value="DeleteExtraRule @index">X</button>
-             </p>
-             index++;
+                @additionalRule
+                <button name="command" value="DeleteExtraRule @index">X</button>
+            </p>
+            index++;
         }
 
     </div>
     @Html.TextBoxFor(m => m.Name)
-    
+
     <input name="CheckBox" id="CheckBox" type="checkbox" value="true" onclick="thefunction()" />
     <input id="addButton" type="submit" value="Add Rule" name="command" />
     <input id="addExtraRule" type="submit" value="Add Extra Rule" name="command" />

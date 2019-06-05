@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 using Enums;
 using Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PestApp.Models.Rules;
 
 namespace PestApp.Controllers
 {
@@ -155,6 +156,7 @@ namespace PestApp.Controllers
                 ClaimsIdentity identity = new ClaimsIdentity(claims, "login");
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(principal);
+                string emailTest = User.Claims.First().Value;
                 return RedirectToAction("CreateRuleSet");
             }
             else
@@ -199,15 +201,23 @@ namespace PestApp.Controllers
                 {
                     card.Face = model.Face;
                 }
-                rules.Add((new Rule(card, model.Type, 0)));
+                Type t = Type.GetType("PestApp.Models.Rules." + model.Type.ToString());
+                if (t.IsSubclassOf(typeof(RuleTypeWithAmount)))
+                {
+                    rules.Add(new Rule { Card = card, RuleAmount = model.RuleAmount, RuleType = model.Type });
+                }
+                else if (t.IsSubclassOf(typeof(RuleTypeWithoutAmount)))
+                {
+                    rules.Add(new Rule { Card = card, RuleAmount = -1, RuleType = model.Type });
+                }
             }
             else if (command == "Add Extra Rule")
             {
                 additionalRules.Add(model.AdditionalRule);
             }
-            else if (command.Substring(0, 11) == "DeleteRule")
+            else if (command.Substring(0, 11) == "DeleteRule ")
             {
-                rules.RemoveAt(Convert.ToInt32(command.Substring(12)));
+                rules.RemoveAt(Convert.ToInt32(command.Substring(11)));
             }
             else
             {
@@ -225,27 +235,12 @@ namespace PestApp.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 string email = User.Claims.First().Value;
+                List<Rule> rules = RuleList;
+                //You can't loop through RuleList directly
                 List<IRule> ruleList = new List<IRule>();
-                foreach (Rule rule in RuleList)
+                foreach(Rule rule in rules)
                 {
-                    if (rule.Card is SuitedCard)
-                    {
-                        SuitedCard suitedCard = (SuitedCard)rule.Card;
-                        DataLibrary.Dbo.SuitedCard card = new DataLibrary.Dbo.SuitedCard
-                        {
-                            Face = rule.Card.Face,
-                            Suit = suitedCard.Suit
-                        };
-                        ruleList.Add(new DataLibrary.Dbo.Rule(card, rule.Type, 0));
-                    }
-                    else
-                    {
-                        DataLibrary.Dbo.Card card = new DataLibrary.Dbo.Card
-                        {
-                            Face = rule.Card.Face
-                        };
-                        ruleList.Add(new DataLibrary.Dbo.Rule(card, rule.Type, 0));
-                    }
+                    ruleList.Add((IRule)rule);
                 }
                 _ruleSetLogic.CreateRuleSet(ruleList, email, AdditionalRuleList, viewModel.Name);
             }

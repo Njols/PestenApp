@@ -14,3 +14,9 @@ function thefunction() {
         cardSuitContainer.style.display = "inline-block";
     }
 }
+
+function hideAndClearAmountBox() {
+    var amountBox = document.getElementById("amountBox");
+    amountBox.style.display = "none";
+    amountBox.textContent = null;
+}

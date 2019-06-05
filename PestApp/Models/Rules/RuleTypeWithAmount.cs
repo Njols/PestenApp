@@ -1,4 +1,6 @@
-﻿using Interfaces;
+﻿using Enums;
+using Interfaces;
+using PestApp.Models.Rules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace PestApp.Models
 {
-    public class Rule : IRule
+    public class RuleTypeWithAmount : Rules.RuleType
     {
-        public ICard Card { get; set; }
-        public string RuleType { get; set; }
         public int RuleAmount { get; set; }
     }
 }

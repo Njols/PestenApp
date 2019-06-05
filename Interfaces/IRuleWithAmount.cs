@@ -5,10 +5,9 @@ using System.Text;
 
 namespace Interfaces
 {
-    public interface IRule
+    public interface IRuleWithAmount : IRule
     {
-        ICard Card { get; set; }
-        string RuleType { get; set; }
         int RuleAmount { get; set; }
+        
     }
 }

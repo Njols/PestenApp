@@ -24,7 +24,7 @@ namespace DataLibrary.DataAccess
                 {
                     conn.Open();
                     cmd.Parameters.AddWithValue("@CardFace", (int)rule.Card.Face);
-                    cmd.Parameters.AddWithValue("@RuleType", (int)rule.Type);
+                    cmd.Parameters.AddWithValue("@RuleType", (string)rule.RuleType);
                     cmd.Parameters.AddWithValue("@Amount", (int)rule.RuleAmount);
                     cmd.Parameters.AddWithValue("@RuleSetId", (int)ruleSetId);
                     if (rule.Card is SuitedCard)
@@ -93,7 +93,7 @@ namespace DataLibrary.DataAccess
                 {
                     Card = card,
                     RuleAmount = (int)reader["RuleAmount"],
-                    Type = (ruleType)reader["RuleType"]
+                    RuleType = (string)reader["RuleType"]
                 };
                 return rule;
             }
