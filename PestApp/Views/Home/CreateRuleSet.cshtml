@@ -8,16 +8,16 @@
 @model CreateRuleSetViewModel
 @using (Html.BeginForm("CreateRuleSet", "Home", FormMethod.Post))
 {
-    <select name="Type">
+    <select name="Type" onchange="HideAndClearAmountBox()" id="typeSelect">
         @foreach (DropDownListItem item in Model.DropDownListItems)
         {
             @if (item.HasAmount)
             {
-                <option class="hasAmount" value="@item.Name" onclick="hideAndClearAmountBox()">@item.Name</option>
+                <option value="@item.Name" id="amounted">@item.Name</option>
             }
             else
             {
-                <option value="@item.Name">@item.Name</option>
+                <option value="@item.Name" id="amountless">@item.Name</option>
             }
         }
     </select>

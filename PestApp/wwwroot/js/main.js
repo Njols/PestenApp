@@ -1,6 +1,4 @@
-﻿var cardSuitContainer = document.getElementById("cardSuitContainer");
-var addRuleButton = document.getElementById("addRuleButton");
-var checkBox = document.getElementById("checkBox");
+﻿
 
 
 function thefunction() {
@@ -15,8 +13,16 @@ function thefunction() {
     }
 }
 
-function hideAndClearAmountBox() {
-    var amountBox = document.getElementById("amountBox");
-    amountBox.style.display = "none";
-    amountBox.textContent = null;
+var amountBox = document.getElementById("amountBox");
+var typeSelect = document.getElementById("typeSelect")
+
+function HideAndClearAmountBox() {
+    var selectedOption = typeSelect.options[typeSelect.selectedIndex];
+    if (selectedOption.id.toString() == "amountless") {
+        amountBox.style.display = "none";
+        amountBox.textContent = null;
+    }
+    else {
+        amountBox.style.display = "inline-block";
+    }
 }
