@@ -14,6 +14,7 @@ using Enums;
 using Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PestApp.Models.Rules;
+using Newtonsoft.Json;
 
 namespace PestApp.Controllers
 {
@@ -182,54 +183,61 @@ namespace PestApp.Controllers
                 Rules = RuleList,
                 AdditionalRules = AdditionalRuleList
             };
+            model.AdditionalRuleSelectList = new SelectList(Enum.GetNames(typeof(additionalRule)).Where(x => !AdditionalRuleList.Contains((additionalRule)Enum.Parse(typeof(additionalRule), x))));
             return View(model);
         }
 
         [HttpPost()]
-        public IActionResult CreateRuleSet (CreateRuleSetViewModel model, string command)
+        public IActionResult RemoveRule (CreateRuleSetViewModel model, string command)
         {
-            List<additionalRule> additionalRules = AdditionalRuleList;
             List<Rule> rules = RuleList;
-            if (command == "Add Rule")
+            rules.RemoveAt(Convert.ToInt32(command));
+            RuleList = rules;
+            return RedirectToAction("CreateRuleSet");
+        }
+        [HttpPost()]
+        public IActionResult RemoveAdditionalRule (CreateRuleSetViewModel model, string command)
+        {
+            List<additionalRule> extraRules = AdditionalRuleList;
+            extraRules.RemoveAt(Convert.ToInt32(command));
+            AdditionalRuleList = extraRules;
+            return RedirectToAction("CreateRuleSet");
+        }
+
+        public IActionResult AddAdditionalRule (CreateRuleSetViewModel model)
+        {
+            List<additionalRule> extraRules = AdditionalRuleList;
+            extraRules.Add(model.AdditionalRule);
+            AdditionalRuleList = extraRules;
+            return RedirectToAction("CreateRuleSet");
+        }
+
+        [HttpPost()]
+        public IActionResult AddRule (CreateRuleSetViewModel model)
+        {
+            List<Rule> rules = RuleList;
+            Card card = new Card();
+            if (model.CheckBox)
             {
-                Card card = new Card();
-                if (model.CheckBox)
-                {
-                    card = new SuitedCard(model.Face, model.Suit);
-                }
-                else
-                {
-                    card.Face = model.Face;
-                }
-                Type t = Type.GetType("PestApp.Models.Rules." + model.Type.ToString());
-                if (t.IsSubclassOf(typeof(RuleTypeWithAmount)))
-                {
-                    rules.Add(new Rule { Card = card, RuleAmount = model.RuleAmount, RuleType = model.Type });
-                }
-                else if (t.IsSubclassOf(typeof(RuleTypeWithoutAmount)))
-                {
-                    rules.Add(new Rule { Card = card, RuleAmount = -1, RuleType = model.Type });
-                }
-            }
-            else if (command == "Add Extra Rule")
-            {
-                additionalRules.Add(model.AdditionalRule);
-            }
-            else if (command.Substring(0, 11) == "DeleteRule ")
-            {
-                rules.RemoveAt(Convert.ToInt32(command.Substring(11)));
+                card = new SuitedCard(model.Face, model.Suit);
             }
             else
             {
-                additionalRules.RemoveAt(Convert.ToInt32(command.Substring(16)));
+                card.Face = model.Face;
             }
-            AdditionalRuleList = additionalRules;
+            Type t = Type.GetType("PestApp.Models.Rules." + model.Type.ToString());
+            if (t.IsSubclassOf(typeof(RuleTypeWithAmount)))
+            {
+                rules.Add(new Rule { Card = card, RuleAmount = model.RuleAmount, RuleType = model.Type });
+            }
+            else if (t.IsSubclassOf(typeof(RuleTypeWithoutAmount)))
+            {
+                rules.Add(new Rule { Card = card, RuleAmount = -1, RuleType = model.Type });
+            }
             RuleList = rules;
-            model.Rules = rules;
-            model.AdditionalRules = additionalRules;
-            model.AdditionalRuleSelectList = new SelectList(Enum.GetNames(typeof(additionalRule)).Where(x => !AdditionalRuleList.Contains((additionalRule)Enum.Parse(typeof(additionalRule), x))));
-            return View(model);
+            return RedirectToAction("CreateRuleSet");
         }
+
         public IActionResult SaveRuleSet (CreateRuleSetViewModel viewModel)
         {
             if (User.Identity.IsAuthenticated)

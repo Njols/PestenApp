@@ -44,7 +44,7 @@ namespace PestApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                .AddCookie(options =>
                 {
                     options.AccessDeniedPath = new PathString("/Home/");
                     options.LoginPath = new PathString("/Home/CreateRuleSet/");
