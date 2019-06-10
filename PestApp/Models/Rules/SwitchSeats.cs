@@ -7,5 +7,18 @@ namespace PestApp.Models.Rules
 {
     public class SwitchSeats : RuleTypeWithAmount
     {
+        public new string DisplayString { get { return "Switch seats clockwise | time(s)."; } }
+        public new string BasicDescription { get { return "Switch seats"; } }
+        public override string GetDisplayString()
+        {
+            if (RuleAmount > 0)
+            {
+                return string.Format($"Switch seats clockwise {RuleAmount} times.");
+            }
+            else
+            {
+                return "Switch seats once";
+            }
+        }
     }
 }

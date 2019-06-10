@@ -9,7 +9,11 @@
 
 @using (Html.BeginForm("AddRule", "Home", FormMethod.Post))
 {
-    <select name="Type" onchange="HideAndClearAmountBox()" id="typeSelect">
+    <p>When a(n) @Html.DropDownListFor(m => m.Face, Model.CardFaceSelectList)</p>
+    <input name="CheckBox" id="CheckBox" type="checkbox" value="true" onclick="thefunction()" /><p>of</p>
+        <div class="form-group" id="cardSuitContainer" style="display:none"> @Html.DropDownListFor(m => m.Suit, Model.CardSuitSelectList)</div>
+    <p>is played,</p>
+    <select name="Type" onchange="CheckAmountBox()" id="typeSelect">
         @foreach (DropDownListItem item in Model.DropDownListItems)
         {
             @if (item.HasAmount)
@@ -22,17 +26,36 @@
             }
         }
     </select>
-
-    <div class="form-group">
-        @Html.DropDownListFor(m => m.Face, Model.CardFaceSelectList)
+    <div id="ruleDisplay">
+        <p id="firstText" style="display:inline"></p>
+        <input id="amountBox" type="number" name="RuleAmount" min="1" style="display:inline"/>
+        <p id="lastText" style="display:inline"></p>
     </div>
-
-    <div class="form-group" id="cardSuitContainer" style="display:none">
-        @Html.DropDownListFor(m => m.Suit, Model.CardSuitSelectList)
-    </div>
-    <input id="amountBox" type="number" name="RuleAmount" min="0" /> <br />
     <input name="CheckBox" id="CheckBox" type="checkbox" value="true" onclick="thefunction()" />
     <input id="addButton" type="submit" value="Add Rule" name="command" />
+    <script>
+        var displayStringArray = @Html.Raw(Json.Serialize(Model.RuleTypeDisplayStrings));
+
+        var firstParagraph = document.getElementById("firstText");
+        var lastParagraph = document.getElementById("lastText");
+        var amountBox = document.getElementById("amountBox");
+        var typeSelect = document.getElementById("typeSelect")
+
+        function CheckAmountBox() {
+            var selectedOption = typeSelect.options[typeSelect.selectedIndex];
+            if (selectedOption.id.toString() == "amountless") {
+                amountBox.style.display = "none";
+                amountBox.textContent = null;
+                lastParagraph.innerHTML = displayStringArray[typeSelect.selectedIndex];
+            }
+            else {
+                amountBox.style.display = "inline-block";
+                var str = displayStringArray[typeSelect.selectedIndex]
+                firstParagraph.innerHTML = str.split("|")[0];
+                lastParagraph.innerHTML = str.split("|")[1];
+            }
+        }
+    </script>
 }
 
 @using (Html.BeginForm("RemoveRule", "Home", FormMethod.Post))

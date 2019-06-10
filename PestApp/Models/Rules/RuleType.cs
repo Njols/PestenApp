@@ -8,5 +8,7 @@ namespace PestApp.Models.Rules
 {
     public class RuleType
     {
+        public string DisplayString { get; set; }
+        public string BasicDescription { get; set; }
     }
 }
