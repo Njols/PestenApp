@@ -10,10 +10,10 @@
 @using (Html.BeginForm("AddRule", "Home", FormMethod.Post))
 {
     <p>When a(n) @Html.DropDownListFor(m => m.Face, Model.CardFaceSelectList)</p>
-    <input name="CheckBox" id="CheckBox" type="checkbox" value="true" onclick="thefunction()" /><p>of</p>
-        <div class="form-group" id="cardSuitContainer" style="display:none"> @Html.DropDownListFor(m => m.Suit, Model.CardSuitSelectList)</div>
-    <p>is played,</p>
-    <select name="Type" onchange="CheckAmountBox()" id="typeSelect">
+    <input name="CheckBox" id="CheckBox" type="checkbox" value="true" onclick="thefunction()" style="display:inline"/><p style="display:inline">of</p>
+        <div id="cardSuitContainer" style="display:none"> @Html.DropDownListFor(m => m.Suit, Model.CardSuitSelectList)</div>
+    <p >is played,</p>
+    <select name="Type" onchange="CheckAmountBox()" id="typeSelect" style="display:inline">
         @foreach (DropDownListItem item in Model.DropDownListItems)
         {
             @if (item.HasAmount)
@@ -54,6 +54,7 @@
                 lastParagraph.innerHTML = str.split("|")[1];
             }
         }
+        window.onload(CheckAmountBox());
     </script>
 }
 
