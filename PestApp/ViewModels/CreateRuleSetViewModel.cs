@@ -18,7 +18,6 @@ namespace PestApp.ViewModels
         public SelectList CardSuitSelectList = new SelectList(Enum.GetNames(typeof(cardSuit)));
         public SelectList CardFaceSelectList = new SelectList(Enum.GetNames(typeof(cardFace)));
         private ReflectionLogic _refLogic = new ReflectionLogic();
-        private Type[] types = Assembly.GetExecutingAssembly().GetTypes().Where(p => p.BaseType == typeof(RuleType)).ToArray();
 
         public List<DropDownListItem> DropDownListItems
         {
@@ -31,24 +30,11 @@ namespace PestApp.ViewModels
                     DropDownListItem item = new DropDownListItem
                     {
                         Name = ruleType.BasicDescription,
-                        HasAmount = ruleType.GetType().IsSubclassOf(typeof(RuleTypeWithAmount))
+                        HasAmount = ruleType.GetType().IsSubclassOf(typeof(RuleTypeWithAmount)),
+                        PostValue = ruleType.GetType().ToString()
                     };
                     returnList.Add(item);
                 }
-                //foreach (Type type in types)
-                //{
-                //    if (type.IsSubclassOf(typeof(RuleTypeWithAmount)) || type.IsSubclassOf(typeof(RuleTypeWithoutAmount)))
-                //    {
-                //        object instance = Activator.CreateInstance(type);
-                //        PropertyInfo basicDescription = type.GetProperty(nameof(RuleTypeWithAmount.BasicDescription));
-                //        DropDownListItem item = new DropDownListItem
-                //        {
-                //            Name = (string)basicDescription.GetValue(instance),
-                //            HasAmount = type.IsSubclassOf(typeof(RuleTypeWithAmount))
-                //        };
-                //        returnList.Add(item);
-                //    }
-                //}
                 return returnList;
             }
         }

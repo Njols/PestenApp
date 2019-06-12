@@ -20,7 +20,7 @@ namespace DataLibrary.DataAccess
         {
             string sql = @"INSERT INTO [RuleSet] (UserId, Name)
                              VALUES (@UserId, @Name)
-                             SELECT SCOPE_IDENTITY()";
+                             SELECT CAST(SCOPE_IDENTITY() AS INT)";
             int ruleSetId;
             using (SqlConnection conn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(sql, conn))

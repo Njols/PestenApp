@@ -18,11 +18,11 @@
         {
             @if (item.HasAmount)
             {
-                <option value="@item.Name" id="amounted">@item.Name</option>
+                <option value="@item.PostValue" id="amounted">@item.Name</option>
             }
             else
             {
-                <option value="@item.Name" id="amountless">@item.Name</option>
+                <option value="@item.PostValue" id="amountless">@item.Name</option>
             }
         }
     </select>
@@ -31,7 +31,6 @@
         <input id="amountBox" type="number" name="RuleAmount" min="1" style="display:inline"/>
         <p id="lastText" style="display:inline"></p>
     </div>
-    <input name="CheckBox" id="CheckBox" type="checkbox" value="true" onclick="thefunction()" />
     <input id="addButton" type="submit" value="Add Rule" name="command" />
     <script>
         var displayStringArray = @Html.Raw(Json.Serialize(Model.RuleTypeDisplayStrings));
@@ -97,8 +96,8 @@
     </div>
 }
 
-@using (Html.BeginForm("CreateRuleSet", "Home", FormMethod.Post))
+@using (Html.BeginForm("SaveRuleSet", "Home", FormMethod.Post))
 {
     @Html.TextBoxFor(m => m.Name)
-    @Html.ActionLink("Save Ruleset", "SaveRuleSet", "Home")
+    <input type="submit" value="Save Rule Set"/>
 }

@@ -20,7 +20,10 @@ namespace DataLibrary.DataAccess
             string query = "CreateRule";
             using(SqlConnection conn = new SqlConnection(_connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn)
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                })
                 {
                     conn.Open();
                     cmd.Parameters.AddWithValue("@CardFace", (int)rule.Card.Face);
@@ -30,7 +33,7 @@ namespace DataLibrary.DataAccess
                     if (rule.Card is SuitedCard)
                     {
                         SuitedCard card = (SuitedCard)rule.Card;
-                        cmd.Parameters.AddWithValue("CardSuit", (int)card.Suit);
+                        cmd.Parameters.AddWithValue("@CardSuit", (int)card.Suit);
                     }
                     cmd.ExecuteNonQuery();
                 }

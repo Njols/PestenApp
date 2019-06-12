@@ -89,7 +89,7 @@ namespace PestApp
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=CreateRuleSet}/{id?}");
+                    template: "{controller=Home}/{action=LogIn}/{id?}");
             });
         }
     }

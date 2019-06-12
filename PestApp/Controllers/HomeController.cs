@@ -235,7 +235,7 @@ namespace PestApp.Controllers
             {
                 card.Face = model.Face;
             }
-            Type t = Type.GetType("PestApp.Models.Rules." + model.Type.ToString());
+            Type t = Type.GetType(model.Type.ToString());
             if (t.IsSubclassOf(typeof(RuleTypeWithAmount)))
             {
                 rules.Add(new Rule { Card = card, RuleAmount = model.RuleAmount, RuleType = model.Type });

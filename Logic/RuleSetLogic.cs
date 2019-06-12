@@ -35,7 +35,17 @@ namespace Logic
                 Rules = rules,
                 ExtraRules = additionalRules
             };
-            _ruleSetProcessor.AddRuleSet(ruleSet);
+            int ruleSetId = _ruleSetProcessor.AddRuleSet(ruleSet);
+            foreach (IRule rule in rules)
+            {
+                _ruleProcessor.AddRule(rule, ruleSetId);
+            }
+            foreach(additionalRule addRule in additionalRules)
+            {
+                _additionalRuleProcessor.AddAdditionalRule((int)addRule, ruleSetId);
+            }
+
+
         }
         public List<IRuleSet> GetRuleSets()
         {

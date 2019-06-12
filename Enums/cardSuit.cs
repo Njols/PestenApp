@@ -7,6 +7,6 @@ namespace Enums
 {
     public enum cardSuit
     {
-        Hearts,Diamonds,Spades,Clubs, Any
+        Hearts,Diamonds,Spades,Clubs
     }
 }
