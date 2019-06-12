@@ -7,7 +7,7 @@ namespace PestApp.Models.Rules
 {
     public class RevertDirection : RuleTypeWithoutAmount
     {
-        public new string DisplayString { get { return "Revert the direction the turns take."; } }
-        public new string BasicDescription { get { return "Change directions"; } }
+        public override string DisplayString { get { return "Revert the direction the turns take."; } }
+        public override string BasicDescription { get { return "Change directions"; } }
     }
 }

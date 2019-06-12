@@ -15,6 +15,7 @@ using Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PestApp.Models.Rules;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace PestApp.Controllers
 {
@@ -54,7 +55,7 @@ namespace PestApp.Controllers
                         _ruleList = new List<Rule>();
                     }
                 }
-                    
+
                 return _ruleList;
             }
             set
@@ -132,9 +133,14 @@ namespace PestApp.Controllers
                 {
                     new Claim(ClaimTypes.Email, user.Email)
                 };
-                ClaimsIdentity identity = new ClaimsIdentity(claims, "login");
+                ClaimsIdentity identity = new ClaimsIdentity(claims);
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
-                await HttpContext.SignInAsync(principal);
+                await HttpContext.SignInAsync("loginAuth", principal, new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddDays(7)
+                });
+                string email = User.Claims.FirstOrDefault().Value;
                 return RedirectToAction("CreateRuleSet");
             }
             return View();
@@ -154,10 +160,14 @@ namespace PestApp.Controllers
                 {
                     new Claim(ClaimTypes.Email, viewModel.Email)
                 };
-                ClaimsIdentity identity = new ClaimsIdentity(claims, "login");
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                identity.AddClaims(claims);
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
-                await HttpContext.SignInAsync(principal);
-                string emailTest = User.Claims.First().Value;
+                await HttpContext.SignInAsync("loginAuth", principal, new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddDays(7)
+                });
                 return RedirectToAction("CreateRuleSet");
             }
             else

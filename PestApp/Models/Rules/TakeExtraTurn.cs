@@ -7,8 +7,8 @@ namespace PestApp.Models.Rules
 {
     public class TakeExtraTurn : RuleTypeWithAmount
     {
-        public new string DisplayString { get { return "Current player may take | extra turn(s)"; } }
-        public new string BasicDescription { get { return "Take extra turns"; } }
+        public override string DisplayString { get { return "Current player may take | extra turn(s)"; } }
+        public override string BasicDescription { get { return "Take extra turns"; } }
         public override string GetDisplayString()
         {
             if (RuleAmount > 1)

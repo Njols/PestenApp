@@ -7,8 +7,8 @@ namespace PestApp.Models.Rules
 {
     public class SwitchSeats : RuleTypeWithAmount
     {
-        public new string DisplayString { get { return "Switch seats clockwise | time(s)."; } }
-        public new string BasicDescription { get { return "Switch seats"; } }
+        public override string DisplayString { get { return "Switch seats clockwise | time(s)."; } }
+        public override string BasicDescription { get { return "Switch seats"; } }
         public override string GetDisplayString()
         {
             if (RuleAmount > 0)

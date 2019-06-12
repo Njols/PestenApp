@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Reflection;
 using PestApp.Models.Rules;
+using Logic;
 
 namespace PestApp.ViewModels
 {
@@ -16,27 +17,38 @@ namespace PestApp.ViewModels
     {
         public SelectList CardSuitSelectList = new SelectList(Enum.GetNames(typeof(cardSuit)));
         public SelectList CardFaceSelectList = new SelectList(Enum.GetNames(typeof(cardFace)));
-        private Type[] types = Assembly.GetExecutingAssembly().GetTypes();
+        private ReflectionLogic _refLogic = new ReflectionLogic();
+        private Type[] types = Assembly.GetExecutingAssembly().GetTypes().Where(p => p.BaseType == typeof(RuleType)).ToArray();
 
         public List<DropDownListItem> DropDownListItems
         {
             get
             {
+                List<RuleType> allRuleTypes = _refLogic.GetAllSubClassesOf<RuleType>(Assembly.GetExecutingAssembly());
                 List<DropDownListItem> returnList = new List<DropDownListItem>();
-                foreach (Type type in types)
+                foreach (RuleType ruleType in allRuleTypes)
                 {
-                    if (type.IsSubclassOf(typeof(RuleTypeWithAmount)) || type.IsSubclassOf(typeof(RuleTypeWithoutAmount)))
+                    DropDownListItem item = new DropDownListItem
                     {
-                        object instance = Activator.CreateInstance(type);
-                        PropertyInfo basicDescription = type.GetProperty(nameof(RuleTypeWithAmount.BasicDescription));
-                        DropDownListItem item = new DropDownListItem
-                        {
-                            Name = (string)basicDescription.GetValue(instance),
-                            HasAmount = type.IsSubclassOf(typeof(RuleTypeWithAmount))
-                        };
-                        returnList.Add(item);
-                    }
+                        Name = ruleType.BasicDescription,
+                        HasAmount = ruleType.GetType().IsSubclassOf(typeof(RuleTypeWithAmount))
+                    };
+                    returnList.Add(item);
                 }
+                //foreach (Type type in types)
+                //{
+                //    if (type.IsSubclassOf(typeof(RuleTypeWithAmount)) || type.IsSubclassOf(typeof(RuleTypeWithoutAmount)))
+                //    {
+                //        object instance = Activator.CreateInstance(type);
+                //        PropertyInfo basicDescription = type.GetProperty(nameof(RuleTypeWithAmount.BasicDescription));
+                //        DropDownListItem item = new DropDownListItem
+                //        {
+                //            Name = (string)basicDescription.GetValue(instance),
+                //            HasAmount = type.IsSubclassOf(typeof(RuleTypeWithAmount))
+                //        };
+                //        returnList.Add(item);
+                //    }
+                //}
                 return returnList;
             }
         }
@@ -44,15 +56,11 @@ namespace PestApp.ViewModels
         {
             get
             {
+                List<RuleType> allRuleTypes = _refLogic.GetAllSubClassesOf<RuleType>(Assembly.GetExecutingAssembly());
                 List<string> returnList = new List<string>();
-                foreach (Type type in types)
+                foreach(RuleType ruletype in allRuleTypes)
                 {
-                    if (type.IsSubclassOf(typeof(RuleTypeWithAmount)) || type.IsSubclassOf(typeof(RuleTypeWithoutAmount)))
-                    {
-                        object instance = Activator.CreateInstance(type);
-                        PropertyInfo displayString = type.GetProperty(nameof(RuleType.DisplayString));
-                        returnList.Add((string)displayString.GetValue(instance));
-                    }
+                    returnList.Add(ruletype.DisplayString);
                 }
                 return returnList.ToArray();
             }

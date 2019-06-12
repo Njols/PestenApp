@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace PestApp.Models
 {
 
-    public class RuleTypeWithoutAmount : Rules.RuleType
+    public abstract class RuleTypeWithoutAmount : Rules.RuleType
     {
     }
 }

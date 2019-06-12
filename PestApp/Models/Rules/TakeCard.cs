@@ -7,8 +7,8 @@ namespace PestApp.Models.Rules
 {
     public class TakeCard : RuleTypeWithAmount
     {
-        public new string DisplayString { get { return "Next player takes | cards."; } }
-        public new string BasicDescription { get { return "Next player takes cards"; } }
+        public override string DisplayString { get { return "Next player takes | cards."; } }
+        public override string BasicDescription { get { return "Next player takes cards"; } }
         public override string GetDisplayString()
         {
             if (RuleAmount > 1)

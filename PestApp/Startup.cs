@@ -43,13 +43,12 @@ namespace PestApp
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.AccessDeniedPath = new PathString("/Home/");
-                    options.LoginPath = new PathString("/Home/CreateRuleSet/");
-                    options.LogoutPath = new PathString("/Home/");
-                });
+            services.AddAuthentication("loginAuth")
+            .AddCookie("loginAuth", options => {
+                options.LoginPath = "/Home/CreateRuleSet/";
+                options.Cookie.Expiration = new TimeSpan(7, 0, 0, 0);
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSession(options =>
@@ -84,6 +83,7 @@ namespace PestApp
             app.UseStaticFiles();
             app.UseSession();
             app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
