@@ -103,18 +103,25 @@ namespace DataLibrary.DataAccess
                     conn.Open();
                     cmd.Parameters.AddWithValue("@Id", id);
                     SqlDataReader reader = cmd.ExecuteReader();
-                    int _id = (int)reader["Id"];
-                    string username = (string)reader["Username"];
-                    string email = (string)reader["Email"];
-                    byte[] passwordHash = (byte[])reader["Password"];
-                    User user = new User
+                    if (reader.Read())
                     {
-                        Id = id,
-                        Username = username,
-                        Email = email,
-                        PasswordHash = passwordHash
-                    };
-                    return user;
+                        int _id = (int)reader["Id"];
+                        string username = (string)reader["Username"];
+                        string email = (string)reader["Email"];
+                        byte[] passwordHash = (byte[])reader["Password"];
+                        User user = new User
+                        {
+                            Id = id,
+                            Username = username,
+                            Email = email,
+                            PasswordHash = passwordHash
+                        };
+                        return user;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
         }

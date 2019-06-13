@@ -79,13 +79,14 @@ namespace Logic
 
         public RuleSet CompleteRuleSet (IRuleSet incompleteRuleSet)
         {
-            RuleSet ruleSet = (RuleSet)incompleteRuleSet;
+                RuleSet ruleSet = (RuleSet)incompleteRuleSet;
                 List<IRule> rules = _ruleProcessor.GetRulesByRuleSet(ruleSet.Id);
                 List<additionalRule> additionalRules = _additionalRuleProcessor.GetAdditionalRulesByRuleSet(ruleSet.Id);
                 RuleSet completeRuleSet = new RuleSet
                 {
                     Id = ruleSet.Id,
                     UserId = ruleSet.UserId,
+                    Name = ruleSet.Name,
                     Rules = rules,
                     ExtraRules = additionalRules
                 };

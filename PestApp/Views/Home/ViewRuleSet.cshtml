@@ -1,7 +1,12 @@
-﻿
+﻿@using PestApp.ViewModels;
 @{
     ViewData["Title"] = "ViewRuleSet";
 }
-@model RuleSet
+@model ViewRuleSetViewModel
 
-
+<h1>@Model.UserName</h1>
+<p>@Model.Name</p>
+@foreach (DisplayRule rule in Model.DisplayRules)
+{
+    <p>@rule.Card.GetCard() @rule.RuleType.BasicDescription @rule.RuleAmount</p>
+}

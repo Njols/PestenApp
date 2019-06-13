@@ -238,11 +238,11 @@ namespace PestApp.Controllers
             Type t = Type.GetType(model.Type.ToString());
             if (t.IsSubclassOf(typeof(RuleTypeWithAmount)))
             {
-                rules.Add(new Rule { Card = card, RuleAmount = model.RuleAmount, RuleType = model.Type });
+                rules.Add(new Rule { Card = card, RuleAmount = model.RuleAmount, RuleTypeString = model.Type });
             }
             else if (t.IsSubclassOf(typeof(RuleTypeWithoutAmount)))
             {
-                rules.Add(new Rule { Card = card, RuleAmount = -1, RuleType = model.Type });
+                rules.Add(new Rule { Card = card, RuleAmount = -1, RuleTypeString = model.Type });
             }
             RuleList = rules;
             return RedirectToAction("CreateRuleSet");
@@ -265,10 +265,25 @@ namespace PestApp.Controllers
             return RedirectToAction("CreateRuleSet");
         }
 
-        public IActionResult ViewRuleSet (int ruleSetId)
+        public IActionResult ViewRuleSet (int id)
         {
-            RuleSet ruleSet = (RuleSet)_ruleSetLogic.GetRuleSetById(ruleSetId);
-            return View(ruleSet);
+            IRuleSet ruleSet = (IRuleSet)_ruleSetLogic.GetRuleSetById(id);
+            List<DisplayRule> displayRules = new List<DisplayRule>();
+            foreach(IRule rule in ruleSet.Rules)
+            {
+                DisplayRule displayRule = new DisplayRule(rule.RuleTypeString);
+                displayRule.Card = rule.Card;
+                displayRule.RuleAmount = rule.RuleAmount;
+                displayRules.Add(displayRule);
+            }
+            ViewRuleSetViewModel viewModel = new ViewRuleSetViewModel
+            {
+                ExtraRules = ruleSet.ExtraRules,
+                DisplayRules = displayRules,
+                Name = ruleSet.Name,
+                UserName = _userProcessor.GetUserById(ruleSet.UserId).Username
+            };
+            return View(viewModel);
         }
     }
 }

@@ -7,11 +7,11 @@ namespace DataLibrary.Dbo
     {
         public ICard Card { get; set; }
         public int RuleAmount { get; set; }
-        public string RuleType { get; set; }
+        public string RuleTypeString { get; set; }
         public Rule (ICard card, string ruletype, int ruleAmount)
         {
             Card = card;
-            RuleType = ruletype;
+            RuleTypeString = ruletype;
             RuleAmount = ruleAmount;
         }
         public Rule ()

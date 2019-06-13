@@ -27,7 +27,7 @@ namespace DataLibrary.DataAccess
                 {
                     conn.Open();
                     cmd.Parameters.AddWithValue("@CardFace", (int)rule.Card.Face);
-                    cmd.Parameters.AddWithValue("@RuleType", (string)rule.RuleType);
+                    cmd.Parameters.AddWithValue("@RuleType", (string)rule.RuleTypeString);
                     cmd.Parameters.AddWithValue("@Amount", (int)rule.RuleAmount);
                     cmd.Parameters.AddWithValue("@RuleSetId", (int)ruleSetId);
                     if (rule.Card is SuitedCard)
@@ -67,9 +67,9 @@ namespace DataLibrary.DataAccess
         }
         public IRule GetRuleById(int ruleId)
         {
-            string query2 = @"SELECT CardFace,CardSuit, RuleType, RuleAmount
+            string query2 = @"SELECT CardFace,CardSuit, RuleType, Amount
                                 FROM [Rule]
-                                WHERE RuleId = @RuleId";
+                                WHERE Id = @RuleId";
             using (SqlConnection conn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(query2, conn))
             {
@@ -77,28 +77,35 @@ namespace DataLibrary.DataAccess
                 cmd.Parameters.AddWithValue("@RuleId", ruleId);
                 SqlDataReader reader = cmd.ExecuteReader();
                 ICard card;
-                if (reader["CardSuit"] != null)
+                if (reader.Read())
                 {
-                    card = new SuitedCard
+                    if (!DBNull.Value.Equals(reader["CardSuit"]))
                     {
-                        Face = (cardFace)reader["CardFace"],
-                        Suit = (cardSuit)reader["CardSuit"]
+                        card = new SuitedCard
+                        {
+                            Face = (cardFace)reader["CardFace"],
+                            Suit = (cardSuit)reader["CardSuit"]
+                        };
+                    }
+                    else
+                    {
+                        card = new Card
+                        {
+                            Face = (cardFace)reader["CardFace"]
+                        };
+                    }
+                    Rule rule = new Rule
+                    {
+                        Card = card,
+                        RuleAmount = (int)reader["Amount"],
+                        RuleTypeString = (string)reader["RuleType"]
                     };
+                    return rule;
                 }
                 else
                 {
-                    card = new Card
-                    {
-                        Face = (cardFace)reader["CardFace"]
-                    };
+                    return null;
                 }
-                Rule rule = new Rule
-                {
-                    Card = card,
-                    RuleAmount = (int)reader["RuleAmount"],
-                    RuleType = (string)reader["RuleType"]
-                };
-                return rule;
             }
         }
     }

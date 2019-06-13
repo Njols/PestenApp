@@ -35,7 +35,7 @@ namespace DataLibrary.DataAccess
 
         public List<IRuleSet> GetRuleSets()
         {
-            string sql = @"SELECT * FROM [RuleSet]";
+            string sql = @"SELECT Id, UserId, Name FROM [RuleSet]";
             List<IRuleSet> ruleSets = new List<IRuleSet>();
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
@@ -59,13 +59,14 @@ namespace DataLibrary.DataAccess
 
         public IRuleSet GetRuleSetById(int ruleSetId)
         {
-            string sql = @"SELECT * FROM [RuleSet] WHERE Id = @RuleSetId";
+            string sql = @"SELECT Id, UserId, Name FROM [RuleSet] WHERE Id = @RuleSetId";
             RuleSet ruleSet;
             using(SqlConnection conn = new SqlConnection(_connectionString))
             {
                 using(SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     conn.Open();
+                    cmd.Parameters.AddWithValue("@RuleSetId", ruleSetId);
                     SqlDataReader reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {

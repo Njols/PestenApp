@@ -8,7 +8,7 @@ namespace Interfaces
     public interface IRule
     {
         ICard Card { get; set; }
-        string RuleType { get; set; }
+        string RuleTypeString { get; set; }
         int RuleAmount { get; set; }
     }
 }

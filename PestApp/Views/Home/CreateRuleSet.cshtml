@@ -9,30 +9,31 @@
 
 @using (Html.BeginForm("AddRule", "Home", FormMethod.Post))
 {
-    <p>When a(n) @Html.DropDownListFor(m => m.Face, Model.CardFaceSelectList)</p>
-    <input name="CheckBox" id="CheckBox" type="checkbox" value="true" onclick="thefunction()" style="display:inline"/><p style="display:inline">of</p>
+    <div id="ruleSelection">
+        <p>When a(n) @Html.DropDownListFor(m => m.Face, Model.CardFaceSelectList)</p>
+        <input name="CheckBox" id="CheckBox" type="checkbox" value="true" onclick="thefunction()" style="display:inline" /><p style="display:inline">of</p>
         <div id="cardSuitContainer" style="display:none"> @Html.DropDownListFor(m => m.Suit, Model.CardSuitSelectList)</div>
-    <p >is played,</p>
-    <select name="Type" onchange="CheckAmountBox()" id="typeSelect" style="display:inline">
-        @foreach (DropDownListItem item in Model.DropDownListItems)
-        {
-            @if (item.HasAmount)
+        <p>is played,</p>
+        <select name="Type" onchange="CheckAmountBox()" id="typeSelect" style="display:inline">
+            @foreach (DropDownListItem item in Model.DropDownListItems)
             {
-                <option value="@item.PostValue" id="amounted">@item.Name</option>
+                @if (item.HasAmount)
+                {
+                    <option value="@item.PostValue" id="amounted">@item.Name</option>
+                }
+                else
+                {
+                    <option value="@item.PostValue" id="amountless">@item.Name</option>
+                }
             }
-            else
-            {
-                <option value="@item.PostValue" id="amountless">@item.Name</option>
-            }
-        }
-    </select>
-    <div id="ruleDisplay">
-        <p id="firstText" style="display:inline"></p>
-        <input id="amountBox" type="number" name="RuleAmount" min="1" style="display:inline"/>
-        <p id="lastText" style="display:inline"></p>
-    </div>
-    <input id="addButton" type="submit" value="Add Rule" name="command" />
-    <script>
+        </select>
+        <div id="ruleDisplay">
+            <p id="firstText" style="display:inline"></p>
+            <input id="amountBox" type="number" name="RuleAmount" min="1" style="display:inline" />
+            <p id="lastText" style="display:inline"></p>
+        </div>
+        <input id="addButton" type="submit" value="Add Rule" name="command" />
+        <script>
         var displayStringArray = @Html.Raw(Json.Serialize(Model.RuleTypeDisplayStrings));
 
         var firstParagraph = document.getElementById("firstText");
@@ -55,34 +56,22 @@
             }
         }
         window.onload(CheckAmountBox());
-    </script>
-}
-
-@using (Html.BeginForm("RemoveRule", "Home", FormMethod.Post))
-{
-    var Index = 0;
-
-    <div id="id">
-        @foreach (Rule rule in Model.Rules)
-        {
-            <p>
-                @rule.Card.GetCard() @rule.RuleType
-                <button name="command" value="@Index">X</button>
-            </p>
-            Index++;
-        }
+        </script>
     </div>
 }
 
+
 @using (Html.BeginForm("AddAdditionalRule", "Home", FormMethod.Post))
 {
-    @Html.DropDownListFor(m => m.AdditionalRule, Model.AdditionalRuleSelectList)
-    <input id="addExtraRule" type="submit" value="Add Extra Rule" name="command" />
+    <div id="additionalRuleSelection">
+        @Html.DropDownListFor(m => m.AdditionalRule, Model.AdditionalRuleSelectList)
+        <input id="addExtraRule" type="submit" value="Add Extra Rule" name="command" />
+    </div>
 }
 
 @using (Html.BeginForm("RemoveAdditionalRule", "Home", FormMethod.Post))
 {
-    <div id="divje">
+    <div id="addRuleList">
         @{
             var index = 0;
         }
@@ -97,8 +86,28 @@
     </div>
 }
 
+@using (Html.BeginForm("RemoveRule", "Home", FormMethod.Post))
+{
+    <div id="ruleList">
+        @{
+            var Index = 0;
+        }
+
+        <div id="id">
+            @foreach (Rule rule in Model.Rules)
+            {
+                <p>
+                    @rule.Card.GetCard() @rule.RuleTypeString
+                    <button name="command" value="@Index">X</button>
+                </p>
+                Index++;
+            }
+        </div>
+    </div>
+}
+
 @using (Html.BeginForm("SaveRuleSet", "Home", FormMethod.Post))
 {
     @Html.TextBoxFor(m => m.Name)
-    <input type="submit" value="Save Rule Set"/>
+    <input type="submit" value="Save Rule Set" />
 }
