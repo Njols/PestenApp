@@ -1,2 +1,7 @@
-﻿body {
+﻿
+.ruleList {
+    height: 250px;
+    width: 18%;
+    overflow: hidden;
+    overflow-y: scroll;
 }

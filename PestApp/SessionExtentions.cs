@@ -13,7 +13,7 @@ namespace PestApp
         {
             JsonSerializerSettings _settings = new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.Auto
+                TypeNameHandling = TypeNameHandling.All
             };
             session.SetString(key, JsonConvert.SerializeObject(value, _settings));
         }
@@ -22,7 +22,7 @@ namespace PestApp
         {
             JsonSerializerSettings _settings = new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.Auto
+                TypeNameHandling = TypeNameHandling.All
             };
             var value = session.GetString(key);
 

@@ -39,20 +39,20 @@ namespace PestApp.Controllers
         private UserLogic _userLogic;
         private RuleSetLogic _ruleSetLogic;
 
-        private List<Rule> _ruleList;
-        private List<Rule> RuleList
+        private List<DisplayRule> _ruleList;
+        private List<DisplayRule> RuleList
         {
             get
             {
                 if (_ruleList == null)
                 {
-                    if (HttpContext.Session.Get<List<Rule>>("RuleList") != null)
+                    if (HttpContext.Session.Get<List<DisplayRule>>("RuleList") != null)
                     {
-                        _ruleList = HttpContext.Session.Get<List<Rule>>("RuleList");
+                        _ruleList = HttpContext.Session.Get<List<DisplayRule>>("RuleList");
                     }
                     else
                     {
-                        _ruleList = new List<Rule>();
+                        _ruleList = new List<DisplayRule>();
                     }
                 }
 
@@ -190,7 +190,7 @@ namespace PestApp.Controllers
         {
             CreateRuleSetViewModel model = new CreateRuleSetViewModel
             {
-                Rules = RuleList,
+                DisplayRules = RuleList,
                 AdditionalRules = AdditionalRuleList
             };
             model.AdditionalRuleSelectList = new SelectList(Enum.GetNames(typeof(additionalRule)).Where(x => !AdditionalRuleList.Contains((additionalRule)Enum.Parse(typeof(additionalRule), x))));
@@ -200,7 +200,7 @@ namespace PestApp.Controllers
         [HttpPost()]
         public IActionResult RemoveRule (CreateRuleSetViewModel model, string command)
         {
-            List<Rule> rules = RuleList;
+            List<DisplayRule> rules = RuleList;
             rules.RemoveAt(Convert.ToInt32(command));
             RuleList = rules;
             return RedirectToAction("CreateRuleSet");
@@ -225,7 +225,7 @@ namespace PestApp.Controllers
         [HttpPost()]
         public IActionResult AddRule (CreateRuleSetViewModel model)
         {
-            List<Rule> rules = RuleList;
+            List<DisplayRule> rules = RuleList;
             Card card = new Card();
             if (model.CheckBox)
             {
@@ -238,11 +238,11 @@ namespace PestApp.Controllers
             Type t = Type.GetType(model.Type.ToString());
             if (t.IsSubclassOf(typeof(RuleTypeWithAmount)))
             {
-                rules.Add(new Rule { Card = card, RuleAmount = model.RuleAmount, RuleTypeString = model.Type });
+                rules.Add(new DisplayRule(model.Type.ToString(), card, model.RuleAmount));
             }
             else if (t.IsSubclassOf(typeof(RuleTypeWithoutAmount)))
             {
-                rules.Add(new Rule { Card = card, RuleAmount = -1, RuleTypeString = model.Type });
+                rules.Add(new DisplayRule(model.Type.ToString(),card));
             }
             RuleList = rules;
             return RedirectToAction("CreateRuleSet");
@@ -253,10 +253,10 @@ namespace PestApp.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 string email = User.Claims.First().Value;
-                List<Rule> rules = RuleList;
+                List<DisplayRule> rules = RuleList;
                 //You can't loop through RuleList directly
                 List<IRule> ruleList = new List<IRule>();
-                foreach(Rule rule in rules)
+                foreach(DisplayRule rule in rules)
                 {
                     ruleList.Add((IRule)rule);
                 }

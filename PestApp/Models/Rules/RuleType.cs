@@ -10,5 +10,9 @@ namespace PestApp.Models.Rules
     {
         public virtual string DisplayString { get; set; }
         public virtual string BasicDescription { get; set; }
+        public virtual string GetDisplayString()
+        {
+            return DisplayString;
+        }
     }
 }

@@ -65,7 +65,7 @@ namespace PestApp.ViewModels
         [BindRequired]
         public string Name { get; set; }
         public additionalRule AdditionalRule { get; set; }
-        public IEnumerable<Rule> Rules { get; set; }
+        public IEnumerable<DisplayRule> DisplayRules { get; set; }
         public IEnumerable<additionalRule> AdditionalRules { get; set; }
     }
 }

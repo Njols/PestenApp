@@ -11,6 +11,5 @@ namespace PestApp.Models
     public abstract class RuleTypeWithAmount : Rules.RuleType
     {
         public int RuleAmount { get; set; }
-        public abstract string GetDisplayString();
     }
 }

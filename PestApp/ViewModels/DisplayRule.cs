@@ -1,4 +1,5 @@
-﻿using PestApp.Models;
+﻿using Interfaces;
+using PestApp.Models;
 using PestApp.Models.Rules;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,27 @@ namespace PestApp.ViewModels
         {
             Type t = Type.GetType(ruleType);
             RuleType = (RuleType)Activator.CreateInstance(t);
+        }
+        public DisplayRule (string ruleType, ICard card)
+        {
+            Card = card;
+            RuleAmount = -1;
+            Type t = Type.GetType(ruleType);
+            RuleType = (RuleType)Activator.CreateInstance(t);
+        }
+        public DisplayRule(string ruleType, ICard card, int amount)
+        {
+            Type t = Type.GetType(ruleType);
+            RuleTypeWithAmount dummy = (RuleTypeWithAmount)Activator.CreateInstance(t);
+            dummy.RuleAmount = amount;
+            RuleType = dummy;
+            Card = card;
+            RuleAmount = amount;
+        }
+
+        public DisplayRule ()
+        {
+
         }
     }
 }

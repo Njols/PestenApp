@@ -88,16 +88,16 @@
 
 @using (Html.BeginForm("RemoveRule", "Home", FormMethod.Post))
 {
-    <div id="ruleList">
+    <div id="ruleList" style="height: 250px; width: 25%; overflow: hidden; overflow-y: scroll;">
         @{
             var Index = 0;
         }
 
         <div id="id">
-            @foreach (Rule rule in Model.Rules)
+            @foreach (DisplayRule rule in Model.DisplayRules)
             {
                 <p>
-                    @rule.Card.GetCard() @rule.RuleTypeString
+                    @rule.Card.GetCard() @rule.RuleType.GetDisplayString()
                     <button name="command" value="@Index">X</button>
                 </p>
                 Index++;
