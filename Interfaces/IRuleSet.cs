@@ -11,5 +11,6 @@ namespace Interfaces
         string Name { get; set; }
         List<additionalRule> ExtraRules { get; set; }
         int UserId { get; set; }
+        int Id { get; set; }
     }
 }

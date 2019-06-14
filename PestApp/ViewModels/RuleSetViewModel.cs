@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PestApp.ViewModels
 {
-    public class ViewRuleSetViewModel
+    public class RuleSetViewModel
     {
         public List<additionalRule> ExtraRules { get; set; }
         public List<DisplayRule> DisplayRules { get; set; }

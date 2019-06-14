@@ -90,7 +90,19 @@ namespace PestApp.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            List<SimpleRuleSetViewModel> ruleSetViewModels = new List<SimpleRuleSetViewModel>();
+            foreach(IRuleSet ruleSet in _ruleSetLogic.GetRuleSets())
+            {
+                SimpleRuleSetViewModel simpleRuleSet = new SimpleRuleSetViewModel
+                {
+                    Name = ruleSet.Name,
+                    Username = _userLogic.GetUserById(ruleSet.UserId).Username,
+                    AmountOfRules = ruleSet.Rules.Count,
+                    RuleSetId = ruleSet.Id
+                };
+                ruleSetViewModels.Add(simpleRuleSet);
+            }
+            return View(new IndexViewModel {AllRuleSets = ruleSetViewModels });
         }
 
         public IActionResult About()
@@ -276,7 +288,7 @@ namespace PestApp.Controllers
                 displayRule.RuleAmount = rule.RuleAmount;
                 displayRules.Add(displayRule);
             }
-            ViewRuleSetViewModel viewModel = new ViewRuleSetViewModel
+            RuleSetViewModel viewModel = new RuleSetViewModel
             {
                 ExtraRules = ruleSet.ExtraRules,
                 DisplayRules = displayRules,

@@ -51,6 +51,7 @@ namespace DataLibrary.DataAccess
                             UserId = (int)reader["UserId"],
                             Name = (string)reader["Name"]
                         };
+                        ruleSets.Add(ruleSet);
                     }
                 }
             }

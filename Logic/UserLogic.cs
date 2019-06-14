@@ -1,5 +1,6 @@
 ﻿using DataLibrary.DataAccess;
 using DataLibrary.Dbo;
+using Interfaces;
 using System;
 
 namespace Logic
@@ -15,9 +16,14 @@ namespace Logic
             _ruleSetProcessor = ruleSetProcessor;
         }
 
-        public User GetUserByEmail (string email)
+        public IUser GetUserByEmail (string email)
         {
             return _userProcessor.GetUserByEmail(email); 
+        }
+
+        public IUser GetUserById(int id)
+        {
+            return _userProcessor.GetUserById(id);
         }
 
         public bool TryToCreateUser (string email, string username, string password)
@@ -40,7 +46,7 @@ namespace Logic
         }
         public bool PasswordMatches(string email, string password)
         {
-            User user = GetUserByEmail(email);
+            User user = (User)GetUserByEmail(email);
             if (user != null)
             {
                 PasswordHasher hasher = new PasswordHasher(user.PasswordHash);

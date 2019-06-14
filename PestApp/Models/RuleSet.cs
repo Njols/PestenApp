@@ -14,6 +14,7 @@ namespace PestApp.Models
         public List<IRule> Rules { get; set; }
         public string Name { get; set; }
         public int UserId { get; set; }
+        public int Id { get; set; }
         public RuleSet ( List<IRule> rules)
         {
             Rules = rules;
