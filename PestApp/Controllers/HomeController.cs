@@ -134,6 +134,14 @@ namespace PestApp.Controllers
             ViewData["Message"] = "Sign up for our app";
             return View();
         }
+        public async Task<IActionResult> LogOut ()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                await HttpContext.SignOutAsync();
+            }
+            return RedirectToAction("Index");
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUp (User user)
@@ -143,7 +151,8 @@ namespace PestApp.Controllers
             {
                 List<Claim> claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Email, user.Email)
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Name, user.Username)
                 };
                 ClaimsIdentity identity = new ClaimsIdentity(claims);
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
@@ -170,7 +179,8 @@ namespace PestApp.Controllers
             {
                 List<Claim> claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Email, viewModel.Email)
+                    new Claim(ClaimTypes.Email, viewModel.Email),
+                    new Claim(ClaimTypes.Name, _userLogic.GetUserByEmail(viewModel.Email).Username)
                 };
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                 identity.AddClaims(claims);
