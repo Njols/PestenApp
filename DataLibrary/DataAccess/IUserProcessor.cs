@@ -9,8 +9,8 @@ namespace DataLibrary.DataAccess
     public interface IUserProcessor
     {
         int AddUser(IUser user);
-        List<User> GetUsers();
-        User GetUserByEmail(string email);
-        User GetUserById(int id);
+        List<IUser> GetUsers();
+        IUser GetUserByEmail(string email);
+        IUser GetUserById(int id);
     }
 }

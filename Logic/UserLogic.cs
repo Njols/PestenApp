@@ -2,6 +2,7 @@
 using DataLibrary.Dbo;
 using Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace Logic
 {
@@ -56,6 +57,10 @@ namespace Logic
             {
                 return false;
             }
+        }
+        public List<IUser> GetUsers ()
+        {
+            return _userProcessor.GetUsers();
         }
     }
 }

@@ -2,96 +2,32 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using DataLibrary.DataAccess;
+using Interfaces;
+using Logic;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using PestApp.Models;
-using DataLibrary.DataAccess;
 using PestApp.ViewModels;
-using Logic;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Enums;
-using Interfaces;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using PestApp.Models.Rules;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace PestApp.Controllers
 {
     public class HomeController : Controller
     {
-
-        private IUserProcessor _userProcessor;
-        private IRuleSetProcessor _ruleSetProcessor;
-        private IRuleProcessor _ruleProcessor;
-        private IAdditionalRuleProcessor _additionalRuleProcessor;
-        public HomeController (IUserProcessor userProcessor, IRuleSetProcessor ruleSetProcessor, IRuleProcessor ruleProcessor, IAdditionalRuleProcessor additionalRuleProcessor)
-        {
-            _userProcessor = userProcessor;
-            _ruleSetProcessor = ruleSetProcessor;
-            _ruleProcessor = ruleProcessor;
-            _additionalRuleProcessor = additionalRuleProcessor;
-            _userLogic = new UserLogic(_userProcessor, _ruleSetProcessor);
-            _ruleSetLogic = new RuleSetLogic(_userProcessor, _ruleSetProcessor, _ruleProcessor, _additionalRuleProcessor);
-
-        }
         private UserLogic _userLogic;
         private RuleSetLogic _ruleSetLogic;
-
-        private List<DisplayRule> _ruleList;
-        private List<DisplayRule> RuleList
+        public HomeController (IUserProcessor userProcessor, IRuleSetProcessor ruleSetProcessor, IRuleProcessor ruleProcessor, IAdditionalRuleProcessor additionalRuleProcessor)
         {
-            get
-            {
-                if (_ruleList == null)
-                {
-                    if (HttpContext.Session.Get<List<DisplayRule>>("RuleList") != null)
-                    {
-                        _ruleList = HttpContext.Session.Get<List<DisplayRule>>("RuleList");
-                    }
-                    else
-                    {
-                        _ruleList = new List<DisplayRule>();
-                    }
-                }
-
-                return _ruleList;
-            }
-            set
-            {
-                _ruleList = value;
-                HttpContext.Session.Set("RuleList", _ruleList);
-            }
-        }
-        private List<additionalRule> _additionalRules;
-        private List<additionalRule> AdditionalRuleList
-        {
-            get
-            {
-                if (_additionalRules == null)
-                {
-                    if (HttpContext.Session.Get<List<additionalRule>>("AdditionalRuleList") != null)
-                    {
-                        _additionalRules = HttpContext.Session.Get<List<additionalRule>>("AdditionalRuleList");
-                    }
-                    else
-                    {
-                        _additionalRules = new List<additionalRule>();
-                    }
-                }
-                return _additionalRules;
-            }
-            set
-            {
-                _additionalRules = value;
-                HttpContext.Session.Set("AdditionalRuleList", _additionalRules);
-            }
+            _userLogic = new UserLogic(userProcessor, ruleSetProcessor);
+            _ruleSetLogic = new RuleSetLogic(userProcessor, ruleSetProcessor, ruleProcessor, additionalRuleProcessor);
         }
         public IActionResult Index()
         {
             List<SimpleRuleSetViewModel> ruleSetViewModels = new List<SimpleRuleSetViewModel>();
-            foreach(IRuleSet ruleSet in _ruleSetLogic.GetRuleSets())
+            foreach (IRuleSet ruleSet in _ruleSetLogic.GetRuleSets())
             {
                 SimpleRuleSetViewModel simpleRuleSet = new SimpleRuleSetViewModel
                 {
@@ -102,26 +38,7 @@ namespace PestApp.Controllers
                 };
                 ruleSetViewModels.Add(simpleRuleSet);
             }
-            return View(new IndexViewModel {AllRuleSets = ruleSetViewModels });
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            return View(new IndexViewModel { AllRuleSets = ruleSetViewModels });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -129,12 +46,12 @@ namespace PestApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult SignUp ()
+        public IActionResult SignUp()
         {
             ViewData["Message"] = "Sign up for our app";
             return View();
         }
-        public async Task<IActionResult> LogOut ()
+        public async Task<IActionResult> LogOut()
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -144,7 +61,7 @@ namespace PestApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignUp (User user)
+        public async Task<IActionResult> SignUp(User user)
         {
             bool userCreationHasSucceeded = _userLogic.TryToCreateUser(user.Email, user.Username, user.Password);
             if (ModelState.IsValid && userCreationHasSucceeded)
@@ -198,114 +115,15 @@ namespace PestApp.Controllers
             }
 
         }
-        public IActionResult ViewUsers ()
+        public IActionResult ViewUsers()
         {
-            var data = _userProcessor.GetUsers();
+            var data = _userLogic.GetUsers();
             List<User> users = new List<User>();
             foreach (var user in data)
             {
                 users.Add(new User { Email = user.Email, Username = user.Username });
             }
             return View(users);
-        }
-        public IActionResult CreateRuleSet ()
-        {
-            CreateRuleSetViewModel model = new CreateRuleSetViewModel
-            {
-                DisplayRules = RuleList,
-                AdditionalRules = AdditionalRuleList
-            };
-            model.AdditionalRuleSelectList = new SelectList(Enum.GetNames(typeof(additionalRule)).Where(x => !AdditionalRuleList.Contains((additionalRule)Enum.Parse(typeof(additionalRule), x))));
-            return View(model);
-        }
-
-        [HttpPost()]
-        public IActionResult RemoveRule (CreateRuleSetViewModel model, string command)
-        {
-            List<DisplayRule> rules = RuleList;
-            rules.RemoveAt(Convert.ToInt32(command));
-            RuleList = rules;
-            return RedirectToAction("CreateRuleSet");
-        }
-        [HttpPost()]
-        public IActionResult RemoveAdditionalRule (CreateRuleSetViewModel model, string command)
-        {
-            List<additionalRule> extraRules = AdditionalRuleList;
-            extraRules.RemoveAt(Convert.ToInt32(command));
-            AdditionalRuleList = extraRules;
-            return RedirectToAction("CreateRuleSet");
-        }
-
-        public IActionResult AddAdditionalRule (CreateRuleSetViewModel model)
-        {
-            List<additionalRule> extraRules = AdditionalRuleList;
-            extraRules.Add(model.AdditionalRule);
-            AdditionalRuleList = extraRules;
-            return RedirectToAction("CreateRuleSet");
-        }
-
-        [HttpPost()]
-        public IActionResult AddRule (CreateRuleSetViewModel model)
-        {
-            List<DisplayRule> rules = RuleList;
-            Card card = new Card();
-            if (model.CheckBox)
-            {
-                card = new SuitedCard(model.Face, model.Suit);
-            }
-            else
-            {
-                card.Face = model.Face;
-            }
-            Type t = Type.GetType(model.Type.ToString());
-            if (t.IsSubclassOf(typeof(RuleTypeWithAmount)))
-            {
-                rules.Add(new DisplayRule(model.Type.ToString(), card, model.RuleAmount));
-            }
-            else if (t.IsSubclassOf(typeof(RuleTypeWithoutAmount)))
-            {
-                rules.Add(new DisplayRule(model.Type.ToString(),card));
-            }
-            RuleList = rules;
-            return RedirectToAction("CreateRuleSet");
-        }
-
-        public IActionResult SaveRuleSet (CreateRuleSetViewModel viewModel)
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                string email = User.Claims.First().Value;
-                List<DisplayRule> rules = RuleList;
-                //You can't loop through RuleList directly
-                List<IRule> ruleList = new List<IRule>();
-                foreach(DisplayRule rule in rules)
-                {
-                    ruleList.Add((IRule)rule);
-                }
-                _ruleSetLogic.CreateRuleSet(ruleList, email, AdditionalRuleList, viewModel.Name);
-            }
-            return RedirectToAction("CreateRuleSet");
-        }
-
-        public IActionResult ViewRuleSet (int id)
-        {
-            IRuleSet ruleSet = (IRuleSet)_ruleSetLogic.GetRuleSetById(id);
-            List<DisplayRule> displayRules = new List<DisplayRule>();
-            foreach(IRule rule in ruleSet.Rules)
-            {
-                DisplayRule displayRule = new DisplayRule(rule.RuleTypeString);
-                displayRule.Card = rule.Card;
-                displayRule.RuleAmount = rule.RuleAmount;
-                displayRules.Add(displayRule);
-            }
-            RuleSetViewModel viewModel = new RuleSetViewModel
-            {
-                ExtraRules = ruleSet.ExtraRules,
-                DisplayRules = displayRules,
-                Name = ruleSet.Name,
-                UserName = _userProcessor.GetUserById(ruleSet.UserId).Username
-            };
-            return View(viewModel);
         }
     }
 }

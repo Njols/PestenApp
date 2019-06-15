@@ -7,7 +7,7 @@
 <h2>CreateRuleSet</h2>
 @model CreateRuleSetViewModel
 
-@using (Html.BeginForm("AddRule", "Home", FormMethod.Post))
+@using (Html.BeginForm("AddRule", "RuleSet", FormMethod.Post))
 {
     <div id="ruleSelection">
         <p>When a(n) @Html.DropDownListFor(m => m.Face, Model.CardFaceSelectList)</p>
@@ -61,7 +61,7 @@
 }
 
 
-@using (Html.BeginForm("AddAdditionalRule", "Home", FormMethod.Post))
+@using (Html.BeginForm("AddAdditionalRule", "RuleSet", FormMethod.Post))
 {
     <div id="additionalRuleSelection">
         @Html.DropDownListFor(m => m.AdditionalRule, Model.AdditionalRuleSelectList)
@@ -69,7 +69,7 @@
     </div>
 }
 
-@using (Html.BeginForm("RemoveAdditionalRule", "Home", FormMethod.Post))
+@using (Html.BeginForm("RemoveAdditionalRule", "RuleSet", FormMethod.Post))
 {
     <div id="addRuleList">
         @{
@@ -86,7 +86,7 @@
     </div>
 }
 
-@using (Html.BeginForm("RemoveRule", "Home", FormMethod.Post))
+@using (Html.BeginForm("RemoveRule", "RuleSet", FormMethod.Post))
 {
     <div id="ruleList" style="height: 250px; width: 25%; overflow: hidden; overflow-y: scroll;">
         @{
@@ -106,7 +106,7 @@
     </div>
 }
 
-@using (Html.BeginForm("SaveRuleSet", "Home", FormMethod.Post))
+@using (Html.BeginForm("SaveRuleSet", "RuleSet", FormMethod.Post))
 {
     @Html.TextBoxFor(m => m.Name)
     <input type="submit" value="Save Rule Set" />

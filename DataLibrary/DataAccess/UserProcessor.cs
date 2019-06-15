@@ -38,10 +38,10 @@ namespace DataLibrary.DataAccess
             }
             return id;
         }
-        public List<User> GetUsers ()
+        public List<IUser> GetUsers ()
         {
             string sql = @"SELECT Id, Username, Email, Password FROM [User]";
-            List<User> users = new List<User>();
+            List<IUser> users = new List<IUser>();
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -63,7 +63,7 @@ namespace DataLibrary.DataAccess
             }
             return users;
         }
-        public User GetUserByEmail (string email)
+        public IUser GetUserByEmail (string email)
         {
             string sql = @"SELECT Id, Username, Email, Password FROM dbo.[User] WHERE Email = @Email";
             using (SqlConnection conn = new SqlConnection(_connectionString))
@@ -93,7 +93,7 @@ namespace DataLibrary.DataAccess
             }
         }
         
-        public User GetUserById (int id)
+        public IUser GetUserById (int id)
         {
             string sql = @"SELECT Id, Username, Email, Password FROM [User] WHERE Id = @Id";
             using (SqlConnection conn = new SqlConnection(_connectionString))

@@ -25,7 +25,7 @@ namespace Logic
 
         public void CreateRuleSet(List<IRule> rules, string email, List<additionalRule> additionalRules, string name)
         {
-            User user = _userProcessor.GetUserByEmail(email);
+            User user = (User)_userProcessor.GetUserByEmail(email);
             int id = user.Id;
 
             RuleSet ruleSet = new RuleSet
