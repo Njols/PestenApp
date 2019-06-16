@@ -12,5 +12,6 @@ namespace DataLibrary.DataAccess
         List<IRuleSet> GetRuleSets();
         IRuleSet GetRuleSetById(int id);
         List<IRuleSet> GetRuleSetsByAmountOfRules();
+        List<IRuleSet> GetRuleSetsByUser();
     }
 }

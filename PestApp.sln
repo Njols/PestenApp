@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enums", "Enums\Enums.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interfaces", "Interfaces\Interfaces.csproj", "{DCDC3633-CC3F-4802-8174-643A0E95D7B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{EA471177-6584-4D30-B860-C7A3FBDAB890}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{DCDC3633-CC3F-4802-8174-643A0E95D7B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCDC3633-CC3F-4802-8174-643A0E95D7B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCDC3633-CC3F-4802-8174-643A0E95D7B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA471177-6584-4D30-B860-C7A3FBDAB890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA471177-6584-4D30-B860-C7A3FBDAB890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA471177-6584-4D30-B860-C7A3FBDAB890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA471177-6584-4D30-B860-C7A3FBDAB890}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

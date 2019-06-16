@@ -77,7 +77,7 @@ namespace Logic
             return completeRuleSets;
         }
 
-        public RuleSet CompleteRuleSet (IRuleSet incompleteRuleSet)
+        public IRuleSet CompleteRuleSet (IRuleSet incompleteRuleSet)
         {
                 RuleSet ruleSet = (RuleSet)incompleteRuleSet;
                 List<IRule> rules = _ruleProcessor.GetRulesByRuleSet(ruleSet.Id);
@@ -91,6 +91,11 @@ namespace Logic
                     ExtraRules = additionalRules
                 };
             return completeRuleSet;
+        }
+
+        public List<IRuleSet> GetRuleSetsByUser ()
+        {
+            return _ruleSetProcessor.GetRuleSetsByUser();
         }
 
     }

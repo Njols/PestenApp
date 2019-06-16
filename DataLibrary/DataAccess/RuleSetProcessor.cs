@@ -114,5 +114,32 @@ namespace DataLibrary.DataAccess
             return ruleSets;
         }
 
+        public List<IRuleSet> GetRuleSetsByUser()
+        {
+            string sql = @"SELECT Name, Id, UserId FROM [RuleSet]
+                           GROUP BY UserId
+                           ORDER BY COUNT(*)";
+            List<IRuleSet> ruleSets = new List<IRuleSet>();
+            using(SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                using(SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    conn.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while(reader.Read())
+                    {
+                        RuleSet ruleSet = new RuleSet
+                        {
+                            Id = (int)reader["Id"],
+                            Name = (string)reader["Name"],
+                            UserId = (int)reader["UserId"]
+                        };
+                        ruleSets.Add(ruleSet);
+                    }
+                }
+            }
+            return ruleSets;
+        }
+
     }
 }

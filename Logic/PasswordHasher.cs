@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Logic
 {
-    class PasswordHasher
+    public class PasswordHasher
     {
         const int SaltSize = 16, HashSize = 20, HashIter = 10000;
         readonly byte[] _salt, _hash;
