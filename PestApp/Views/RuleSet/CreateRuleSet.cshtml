@@ -1,4 +1,4 @@
-﻿@using PestApp.ViewModels
+﻿@using PestApp.Models
 @using Enums;
 @{
     ViewData["Title"] = "CreateRuleSet";
@@ -6,7 +6,7 @@
 
 <h2>CreateRuleSet</h2>
 @model CreateRuleSetViewModel
-
+<span class="text-danger">@ViewData["Error"]</span>
 @using (Html.BeginForm("AddRule", "RuleSet", FormMethod.Post))
 {
     <div id="ruleSelection">

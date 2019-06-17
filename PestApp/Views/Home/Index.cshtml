@@ -1,6 +1,10 @@
-﻿@using PestApp.ViewModels
+﻿@using PestApp.Models
 @model IndexViewModel
-@foreach(SimpleRuleSetViewModel ruleSet in Model.AllRuleSets)
-{
-    <p>@ruleSet.Name @ruleSet.Username @ruleSet.AmountOfRules </p>
-}
+<span class="text-danger">@ViewData["Error"]</span>
+<table style="height: 250px; width: 25%; overflow: hidden; overflow-y: scroll;">
+    <tr><th>Name</th><th>Username</th><th>Amount of Rules</th></tr>
+    @foreach (SimpleRuleSetViewModel ruleSet in Model.AllRuleSets)
+    {
+        <tr><td>@ruleSet.Name</td><td> @ruleSet.Username</td> <td> @ruleSet.AmountOfRules </td></tr>
+    }
+</table>

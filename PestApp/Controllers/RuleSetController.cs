@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PestApp.Models;
 using DataLibrary.DataAccess;
-using PestApp.ViewModels;
 using Logic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
@@ -165,28 +164,37 @@ namespace PestApp.Controllers
                 }
                 _ruleSetLogic.TryToCreateRuleSet(ruleList, email, AdditionalRuleList, viewModel.Name);
             }
+            ViewData["Error"] = "You need to be logged in to create a ruleset.";
             return RedirectToAction("CreateRuleSet");
         }
 
         public IActionResult ViewRuleSet (int id)
         {
             IRuleSet ruleSet = _ruleSetLogic.GetRuleSetById(id);
-            List<DisplayRule> displayRules = new List<DisplayRule>();
-            foreach(IRule rule in ruleSet.Rules)
+            if (ruleSet != null)
             {
-                DisplayRule displayRule = new DisplayRule(rule.RuleTypeString);
-                displayRule.Card = rule.Card;
-                displayRule.RuleAmount = rule.RuleAmount;
-                displayRules.Add(displayRule);
+                List<DisplayRule> displayRules = new List<DisplayRule>();
+                foreach (IRule rule in ruleSet.Rules)
+                {
+                    DisplayRule displayRule = new DisplayRule(rule.RuleTypeString);
+                    displayRule.Card = rule.Card;
+                    displayRule.RuleAmount = rule.RuleAmount;
+                    displayRules.Add(displayRule);
+                }
+                RuleSetViewModel viewModel = new RuleSetViewModel
+                {
+                    ExtraRules = ruleSet.ExtraRules,
+                    DisplayRules = displayRules,
+                    Name = ruleSet.Name,
+                    UserName = _userProcessor.GetUserById(ruleSet.UserId).Username
+                };
+                return View(viewModel);
             }
-            RuleSetViewModel viewModel = new RuleSetViewModel
+            else
             {
-                ExtraRules = ruleSet.ExtraRules,
-                DisplayRules = displayRules,
-                Name = ruleSet.Name,
-                UserName = _userProcessor.GetUserById(ruleSet.UserId).Username
-            };
-            return View(viewModel);
+                ViewData["Error"] = "Ruleset does not exist.";
+                return RedirectToAction("Index", new {area = "Home" });
+            }
         }
     }
 }

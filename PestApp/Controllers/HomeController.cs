@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using PestApp.Models;
-using PestApp.ViewModels;
+
 
 namespace PestApp.Controllers
 {
@@ -78,9 +78,10 @@ namespace PestApp.Controllers
                     IsPersistent = true,
                     ExpiresUtc = DateTime.UtcNow.AddDays(7)
                 });
-                string email = User.Claims.FirstOrDefault().Value;
-                return RedirectToAction("CreateRuleSet");
+                return RedirectToAction("Index");
             }
+            user = new User();
+            ViewData["Error"] = "Email already in use.";
             return View();
         }
         public IActionResult LogIn()
@@ -111,6 +112,8 @@ namespace PestApp.Controllers
             }
             else
             {
+                viewModel = new LogInViewModel();
+                ViewData["Error"] = "Email and password do not match";
                 return View();
             }
 
