@@ -6,11 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PestApp.ViewModels
+namespace PestApp.Models
 {
-    public class DisplayRule : Rule
+    public class DisplayRule : IRule
     {
         public RuleType RuleType { get; set; }
+        public int Id { get; set; }
+        public ICard Card { get; set; }
+        public string RuleTypeString { get; set; }
+        public int RuleAmount { get; set; }
+
         public DisplayRule (string ruleType)
         {
             Type t = Type.GetType(ruleType);
