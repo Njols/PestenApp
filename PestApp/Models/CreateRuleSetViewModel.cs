@@ -11,7 +11,7 @@ using System.Reflection;
 using PestApp.Models.Rules;
 using Logic;
 
-namespace PestApp.ViewModels
+namespace PestApp.Models
 {
     public class CreateRuleSetViewModel
     {

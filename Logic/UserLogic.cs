@@ -9,12 +9,10 @@ namespace Logic
     public class UserLogic
     {
         private IUserProcessor _userProcessor;
-        private IRuleSetProcessor _ruleSetProcessor;
 
-        public UserLogic(IUserProcessor userProcessor, IRuleSetProcessor ruleSetProcessor)
+        public UserLogic(IUserProcessor userProcessor)
         {
             _userProcessor = userProcessor;
-            _ruleSetProcessor = ruleSetProcessor;
         }
 
         public IUser GetUserByEmail (string email)

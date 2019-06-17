@@ -32,7 +32,7 @@ namespace PestApp.Controllers
             _ruleSetProcessor = ruleSetProcessor;
             _ruleProcessor = ruleProcessor;
             _additionalRuleProcessor = additionalRuleProcessor;
-            _userLogic = new UserLogic(_userProcessor, _ruleSetProcessor);
+            _userLogic = new UserLogic(_userProcessor);
             _ruleSetLogic = new RuleSetLogic(_userProcessor, _ruleSetProcessor, _ruleProcessor, _additionalRuleProcessor);
 
         }
@@ -163,7 +163,7 @@ namespace PestApp.Controllers
                 {
                     ruleList.Add(rule);
                 }
-                _ruleSetLogic.CreateRuleSet(ruleList, email, AdditionalRuleList, viewModel.Name);
+                _ruleSetLogic.TryToCreateRuleSet(ruleList, email, AdditionalRuleList, viewModel.Name);
             }
             return RedirectToAction("CreateRuleSet");
         }

@@ -23,29 +23,32 @@ namespace Logic
             _additionalRuleProcessor = additionalRuleProcessor;
         }
 
-        public void CreateRuleSet(List<IRule> rules, string email, List<additionalRule> additionalRules, string name)
+        public bool TryToCreateRuleSet(List<IRule> rules, string email, List<additionalRule> additionalRules, string name)
         {
-            User user = (User)_userProcessor.GetUserByEmail(email);
-            int id = user.Id;
+            if (_userProcessor.GetUserByEmail(email) != null)
+            {
+                User user = (User)_userProcessor.GetUserByEmail(email);
+                int id = user.Id;
 
-            RuleSet ruleSet = new RuleSet
-            {
-                UserId = id,
-                Name = name,
-                Rules = rules,
-                ExtraRules = additionalRules
-            };
-            int ruleSetId = _ruleSetProcessor.AddRuleSet(ruleSet);
-            foreach (IRule rule in rules)
-            {
-                _ruleProcessor.AddRule(rule, ruleSetId);
+                RuleSet ruleSet = new RuleSet
+                {
+                    UserId = id,
+                    Name = name,
+                    Rules = rules,
+                    ExtraRules = additionalRules
+                };
+                int ruleSetId = _ruleSetProcessor.AddRuleSet(ruleSet);
+                foreach (IRule rule in rules)
+                {
+                    _ruleProcessor.AddRule(rule, ruleSetId);
+                }
+                foreach (additionalRule addRule in additionalRules)
+                {
+                    _additionalRuleProcessor.AddAdditionalRule((int)addRule, ruleSetId);
+                }
+                return true;
             }
-            foreach(additionalRule addRule in additionalRules)
-            {
-                _additionalRuleProcessor.AddAdditionalRule((int)addRule, ruleSetId);
-            }
-
-
+            return false;
         }
         public List<IRuleSet> GetRuleSets()
         {
@@ -61,7 +64,7 @@ namespace Logic
         public IRuleSet GetRuleSetById (int id)
         {
             RuleSet incompleteRuleSet = (RuleSet)_ruleSetProcessor.GetRuleSetById(id);
-            RuleSet completeRuleSet = CompleteRuleSet(incompleteRuleSet);
+            RuleSet completeRuleSet = (RuleSet)CompleteRuleSet(incompleteRuleSet);
             return completeRuleSet;
         }
 
@@ -71,7 +74,7 @@ namespace Logic
             List<IRuleSet> completeRuleSets = new List<IRuleSet>();
             foreach(IRuleSet ruleSet in incompleteRuleSets)
             {
-                RuleSet completeRuleSet = CompleteRuleSet(ruleSet);
+                RuleSet completeRuleSet = (RuleSet)CompleteRuleSet(ruleSet);
                 completeRuleSets.Add(completeRuleSet);
             }
             return completeRuleSets;
@@ -79,17 +82,17 @@ namespace Logic
 
         public IRuleSet CompleteRuleSet (IRuleSet incompleteRuleSet)
         {
-                RuleSet ruleSet = (RuleSet)incompleteRuleSet;
-                List<IRule> rules = _ruleProcessor.GetRulesByRuleSet(ruleSet.Id);
-                List<additionalRule> additionalRules = _additionalRuleProcessor.GetAdditionalRulesByRuleSet(ruleSet.Id);
-                RuleSet completeRuleSet = new RuleSet
-                {
-                    Id = ruleSet.Id,
-                    UserId = ruleSet.UserId,
-                    Name = ruleSet.Name,
-                    Rules = rules,
-                    ExtraRules = additionalRules
-                };
+            RuleSet ruleSet = (RuleSet)incompleteRuleSet;
+            List<IRule> rules = _ruleProcessor.GetRulesByRuleSet(ruleSet.Id);
+            List<additionalRule> additionalRules = _additionalRuleProcessor.GetAdditionalRulesByRuleSet(ruleSet.Id);
+            RuleSet completeRuleSet = new RuleSet
+            {
+                Id = ruleSet.Id,
+                UserId = ruleSet.UserId,
+                Name = ruleSet.Name,
+                Rules = rules,
+                ExtraRules = additionalRules
+            };
             return completeRuleSet;
         }
 
@@ -97,6 +100,5 @@ namespace Logic
         {
             return _ruleSetProcessor.GetRuleSetsByUser();
         }
-
     }
 }

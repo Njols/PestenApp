@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PestApp.ViewModels
+namespace PestApp.Models
 {
     public class LogInViewModel
     {

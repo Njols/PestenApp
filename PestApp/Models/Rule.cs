@@ -8,6 +8,7 @@ namespace PestApp.Models
 {
     public class Rule : IRule
     {
+        public int Id { get; set; }
         public ICard Card { get; set; }
         public string RuleTypeString { get; set; }
         public int RuleAmount { get; set; }

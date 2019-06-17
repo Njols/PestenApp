@@ -5,6 +5,7 @@ namespace DataLibrary.Dbo
 {
     public class Rule : IRule
     {
+        public int Id { get; set; }
         public ICard Card { get; set; }
         public int RuleAmount { get; set; }
         public string RuleTypeString { get; set; }

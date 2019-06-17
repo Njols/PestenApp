@@ -21,7 +21,7 @@ namespace PestApp.Controllers
         private RuleSetLogic _ruleSetLogic;
         public HomeController (IUserProcessor userProcessor, IRuleSetProcessor ruleSetProcessor, IRuleProcessor ruleProcessor, IAdditionalRuleProcessor additionalRuleProcessor)
         {
-            _userLogic = new UserLogic(userProcessor, ruleSetProcessor);
+            _userLogic = new UserLogic(userProcessor);
             _ruleSetLogic = new RuleSetLogic(userProcessor, ruleSetProcessor, ruleProcessor, additionalRuleProcessor);
         }
         public IActionResult Index()
