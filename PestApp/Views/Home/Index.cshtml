@@ -1,10 +1,13 @@
 ﻿@using PestApp.Models
 @model IndexViewModel
 <span class="text-danger">@ViewData["Error"]</span>
-<table style="height: 250px; width: 25%; overflow: hidden; overflow-y: scroll;">
-    <tr><th>Name</th><th>Username</th><th>Amount of Rules</th></tr>
-    @foreach (SimpleRuleSetViewModel ruleSet in Model.AllRuleSets)
-    {
-        <tr><td>@ruleSet.Name</td><td> @ruleSet.Username</td> <td> @ruleSet.AmountOfRules </td></tr>
-    }
-</table>
+<h2>User-Created RuleSets</h2>
+<div style="height: 250px; width: 30%; overflow: hidden; overflow-y: scroll;">
+    <table>
+        <tr><th>Name</th><th>Username</th><th>Amount of Rules</th></tr>
+        @foreach (SimpleRuleSetViewModel ruleSet in Model.AllRuleSets)
+        {
+            <tr onclick="window.location='/RuleSet/ViewRuleSet?id=@ruleSet.RuleSetId'" style="cursor: pointer"><td>@ruleSet.Name</td><td> @ruleSet.Username</td> <td> @ruleSet.AmountOfRules </td></tr>
+        }
+    </table>
+</div>
