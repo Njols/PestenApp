@@ -5,13 +5,19 @@
 }
 @model RuleSetViewModel
 
-<h1>@Model.UserName</h1>
-<p>By @Model.Name</p>
-@foreach (DisplayRule rule in Model.DisplayRules)
-{
-    <p>@rule.Card.GetCard() @rule.RuleType.GetDisplayString()</p>
-}
-@foreach(additionalRule addRule in Model.ExtraRules)
-{
-    <p>@Html.DisplayFor(model => addRule)</p>
-}
+<h1>@Model.Name</h1>
+<p>By @Model.UserName</p>
+<h3>Card-specific rules</h3>
+<div class="scrollableBox">
+    @foreach (DisplayRule rule in Model.DisplayRules)
+    {
+        <p>When a(n) @rule.Card.GetCard() is played, @rule.RuleType.GetDisplayString()</p>
+    }
+</div>
+<h3>General Rules</h3>
+<div class="scrollableBox">
+    @foreach (additionalRule addRule in Model.ExtraRules)
+    {
+        <p>@Html.DisplayFor(model => addRule)</p>
+    }
+</div>

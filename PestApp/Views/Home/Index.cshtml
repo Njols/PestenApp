@@ -3,7 +3,7 @@
 <span class="text-danger">@ViewData["Error"]</span>
 <div>
     <h2>All User-Created RuleSets</h2>
-    <div style="height: 250px; width: 30%; overflow: hidden; overflow-y: scroll;">
+    <div class="scrollableBox">
         <table>
             <tr><th>Name</th><th>Username</th><th>Amount of Rules</th></tr>
             @foreach (SimpleRuleSetViewModel ruleSet in Model.AllRuleSets)
@@ -15,7 +15,7 @@
 </div>
 <div>
     <h2>Biggest RuleSets</h2>
-    <div style="height: 250px; width: 30%; overflow: hidden; overflow-y: scroll;">
+    <div class="scrollableBox">
         <table>
             <tr><th>Name</th><th>Username</th><th>Amount of Rules</th></tr>
             @foreach (SimpleRuleSetViewModel ruleSet in Model.RuleSetsByRuleAmount)

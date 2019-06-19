@@ -64,9 +64,16 @@ namespace Logic
 
         public IRuleSet GetRuleSetById (int id)
         {
-            RuleSet incompleteRuleSet = (RuleSet)_ruleSetProcessor.GetRuleSetById(id);
-            RuleSet completeRuleSet = (RuleSet)CompleteRuleSet(incompleteRuleSet);
-            return completeRuleSet;
+            if (_ruleSetProcessor.GetRuleSetById(id) != null)
+            {
+                RuleSet incompleteRuleSet = (RuleSet)_ruleSetProcessor.GetRuleSetById(id);
+                RuleSet completeRuleSet = (RuleSet)CompleteRuleSet(incompleteRuleSet);
+                return completeRuleSet;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public List<IRuleSet> GetRuleSetsOrderedByRules ()
@@ -84,17 +91,24 @@ namespace Logic
         public IRuleSet CompleteRuleSet (IRuleSet incompleteRuleSet)
         {
             RuleSet ruleSet = (RuleSet)incompleteRuleSet;
-            List<IRule> rules = _ruleProcessor.GetRulesByRuleSet(ruleSet.Id);
-            List<additionalRule> additionalRules = _additionalRuleProcessor.GetAdditionalRulesByRuleSet(ruleSet.Id);
-            RuleSet completeRuleSet = new RuleSet
+            if (_ruleProcessor.GetRulesByRuleSet(ruleSet.Id) != null)
             {
-                Id = ruleSet.Id,
-                UserId = ruleSet.UserId,
-                Name = ruleSet.Name,
-                Rules = rules,
-                ExtraRules = additionalRules
-            };
-            return completeRuleSet;
+                List<IRule> rules = _ruleProcessor.GetRulesByRuleSet(ruleSet.Id);
+                List<additionalRule> additionalRules = _additionalRuleProcessor.GetAdditionalRulesByRuleSet(ruleSet.Id);
+                RuleSet completeRuleSet = new RuleSet
+                {
+                    Id = ruleSet.Id,
+                    UserId = ruleSet.UserId,
+                    Name = ruleSet.Name,
+                    Rules = rules,
+                    ExtraRules = additionalRules
+                };
+                return completeRuleSet;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public List<IRuleSet> GetRuleSetsByUser ()

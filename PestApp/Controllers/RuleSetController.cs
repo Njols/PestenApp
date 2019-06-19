@@ -90,6 +90,7 @@ namespace PestApp.Controllers
         
         public IActionResult CreateRuleSet ()
         {
+            ViewData["Error"] = TempData["Error"];
             CreateRuleSetViewModel model = new CreateRuleSetViewModel
             {
                 DisplayRules = RuleList,
@@ -165,14 +166,15 @@ namespace PestApp.Controllers
                         ruleList.Add(rule);
                     }
                     _ruleSetLogic.TryToCreateRuleSet(ruleList, email, AdditionalRuleList, viewModel.Name);
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    ViewData["Error"] = "Your ruleset needs a name.";
+                    TempData["Error"] = "Your ruleset needs a name.";
                     return RedirectToAction("CreateRuleSet");
                 }
             }
-            ViewData["Error"] = "You need to be logged in to create a ruleset.";
+            TempData["Error"] = "You need to be logged in to create a ruleset.";
             return RedirectToAction("CreateRuleSet");
         }
 
@@ -200,8 +202,8 @@ namespace PestApp.Controllers
             }
             else
             {
-                ViewData["Error"] = "Ruleset does not exist.";
-                return RedirectToAction("Index", new {area = "Home" });
+                TempData["Error"] = "Ruleset does not exist.";
+                return RedirectToAction("Index", "Home");
             }
         }
     }

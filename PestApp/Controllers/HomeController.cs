@@ -26,6 +26,7 @@ namespace PestApp.Controllers
         }
         public IActionResult Index()
         {
+            ViewData["Error"] = TempData["Error"];
             List<SimpleRuleSetViewModel> ruleSetViewModels = new List<SimpleRuleSetViewModel>();
             foreach (IRuleSet ruleSet in _ruleSetLogic.GetRuleSets())
             {
