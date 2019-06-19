@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace PestApp.Models.Rules
 {
-    public class RuleType
+    public abstract class RuleType
     {
         public virtual string DisplayString { get; set; }
         public virtual string BasicDescription { get; set; }
-        public virtual string GetDisplayString()
-        {
-            return DisplayString;
-        }
+        public abstract string GetDisplayString();
     }
 }

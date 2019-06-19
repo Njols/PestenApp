@@ -54,8 +54,6 @@ namespace PestApp.Models
         }
 
         public string Type { get; set; }
-
-        public SelectList AdditionalRuleSelectList = new SelectList(Enum.GetNames(typeof(additionalRule)));
         [BindRequired]
         public cardFace Face { get; set; }
         [BindRequired]
@@ -67,6 +65,7 @@ namespace PestApp.Models
         public string Name { get; set; }
         public additionalRule AdditionalRule { get; set; }
         public IEnumerable<DisplayRule> DisplayRules { get; set; }
-        public IEnumerable<additionalRule> AdditionalRules { get; set; }
+        public List<additionalRule> AdditionalRules { get; set; }
+        public IEnumerable<additionalRule> DropDownAddRules { get; set; }
     }
 }

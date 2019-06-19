@@ -1,5 +1,7 @@
 ﻿@using PestApp.Models
 @using Enums;
+@using System.Collections;
+@using System.Linq;
 @{
     ViewData["Title"] = "CreateRuleSet";
 }
@@ -7,33 +9,35 @@
 <h2>CreateRuleSet</h2>
 @model CreateRuleSetViewModel
 <span class="text-danger">@ViewData["Error"]</span>
-@using (Html.BeginForm("AddRule", "RuleSet", FormMethod.Post))
-{
-    <div id="ruleSelection">
-        <p>When a(n) @Html.DropDownListFor(m => m.Face, Model.CardFaceSelectList)</p>
-        <input name="CheckBox" id="CheckBox" type="checkbox" value="true" onclick="thefunction()" style="display:inline" /><p style="display:inline">of</p>
-        <div id="cardSuitContainer" style="display:none"> @Html.DropDownListFor(m => m.Suit, Model.CardSuitSelectList)</div>
-        <p>is played,</p>
-        <select name="Type" onchange="CheckAmountBox()" id="typeSelect" style="display:inline">
-            @foreach (DropDownListItem item in Model.DropDownListItems)
-            {
-                @if (item.HasAmount)
+<div id="ruleSection">
+    <h2>Add a card-specific rule</h2>
+    @using (Html.BeginForm("AddRule", "RuleSet", FormMethod.Post))
+    {
+        <div id="ruleSelection">
+            <p>When a(n) @Html.DropDownListFor(m => m.Face, Model.CardFaceSelectList)</p>
+            <input name="CheckBox" id="CheckBox" type="checkbox" value="true" onclick="thefunction()" style="display:inline" /><p style="display:inline">of</p>
+            <div id="cardSuitContainer" style="display:none"> @Html.DropDownListFor(m => m.Suit, Model.CardSuitSelectList)</div>
+            <p>is played,</p>
+            <select name="Type" onchange="CheckAmountBox()" id="typeSelect" style="display:inline">
+                @foreach (DropDownListItem item in Model.DropDownListItems)
                 {
-                    <option value="@item.PostValue" id="amounted">@item.Name</option>
+                    @if (item.HasAmount)
+                    {
+                        <option value="@item.PostValue" id="amounted">@item.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@item.PostValue" id="amountless">@item.Name</option>
+                    }
                 }
-                else
-                {
-                    <option value="@item.PostValue" id="amountless">@item.Name</option>
-                }
-            }
-        </select>
-        <div id="ruleDisplay">
-            <p id="firstText" style="display:inline"></p>
-            <input id="amountBox" type="number" name="RuleAmount" min="1" style="display:inline" />
-            <p id="lastText" style="display:inline"></p>
-        </div>
-        <input id="addButton" type="submit" value="Add Rule" name="command" />
-        <script>
+            </select>
+            <div id="ruleDisplay">
+                <p id="firstText" style="display:inline"></p>
+                <input id="amountBox" type="number" name="RuleAmount" min="1" style="display:inline" />
+                <p id="lastText" style="display:inline"></p>
+            </div>
+            <input id="addButton" type="submit" value="Add Rule" name="command" />
+            <script>
         var displayStringArray = @Html.Raw(Json.Serialize(Model.RuleTypeDisplayStrings));
 
         var firstParagraph = document.getElementById("firstText");
@@ -56,58 +60,59 @@
             }
         }
         window.onload(CheckAmountBox());
-        </script>
-    </div>
-}
+            </script>
+        </div>
+    }
+    @using (Html.BeginForm("RemoveRule", "RuleSet", FormMethod.Post))
+    {
+        <div id="ruleList" class="scrollableBox">
+            <div id="id">
+                @for (int i = 0; i < Model.DisplayRules.Count(); i++)
+                {
+                <p>
+                    @Model.DisplayRules.ElementAt(i).Card.GetCard() @Model.DisplayRules.ElementAt(i).RuleType.GetDisplayString()
+                    <button name="command" value="@i">X</button>
+                </p>
+                }
+            </div>
+        </div>
+    }
+</div>
+<div id="additionalRuleSection">
+    <h2>Add a general rule</h2>
+    @using (Html.BeginForm("AddAdditionalRule", "RuleSet", FormMethod.Post))
+    {
+        <div id="additionalRuleSelection">
+            <select name="AdditionalRule" style="display:inline">
+                @foreach (additionalRule item in Model.DropDownAddRules)
+                {
+                    <option value="@item">@EnumHelperClass.EnumDisplayNameFor(item)</option>
+                }
+            </select>
+            <input id="addExtraRule" type="submit" value="Add Extra Rule" name="command" />
+        </div>
+    }
 
-
-@using (Html.BeginForm("AddAdditionalRule", "RuleSet", FormMethod.Post))
-{
-    <div id="additionalRuleSelection">
-        @Html.DropDownListFor(m => m.AdditionalRule, Model.AdditionalRuleSelectList)
-        <input id="addExtraRule" type="submit" value="Add Extra Rule" name="command" />
-    </div>
-}
-
-@using (Html.BeginForm("RemoveAdditionalRule", "RuleSet", FormMethod.Post))
-{
-    <div id="addRuleList">
-        @{
-            var index = 0;
-        }
-        @foreach (additionalRule additionalRule in Model.AdditionalRules)
-        {
-            <p>
-                @additionalRule
-                <button name="command" value="@index">X</button>
-            </p>
-            index++;
-        }
-    </div>
-}
-
-@using (Html.BeginForm("RemoveRule", "RuleSet", FormMethod.Post))
-{
-    <div id="ruleList" style="height: 250px; width: 25%; overflow: hidden; overflow-y: scroll;">
-        @{
-            var Index = 0;
-        }
-
-        <div id="id">
-            @foreach (DisplayRule rule in Model.DisplayRules)
+    @using (Html.BeginForm("RemoveAdditionalRule", "RuleSet", FormMethod.Post))
+    {
+        <div id="addRuleList" class="scrollableBox">
+            @for (int i = 0; i < Model.AdditionalRules.Count; i++)
             {
                 <p>
-                    @rule.Card.GetCard() @rule.RuleType.GetDisplayString()
-                    <button name="command" value="@Index">X</button>
+                    @EnumHelperClass.EnumDisplayNameFor(Model.AdditionalRules[i])
+                    <button name="command" value="@i">X</button>
                 </p>
-                Index++;
             }
         </div>
-    </div>
-}
+    }
+</div>
 
-@using (Html.BeginForm("SaveRuleSet", "RuleSet", FormMethod.Post))
-{
-    @Html.TextBoxFor(m => m.Name)
-    <input type="submit" value="Save Rule Set" />
-}
+<div style="width:100%; align-items:center; height:250px; display:inline-block">
+    @using (Html.BeginForm("SaveRuleSet", "RuleSet", FormMethod.Post))
+    {
+
+        @Html.TextBoxFor(m => m.Name)
+        <input type="submit" value="Save Rule Set" />
+
+    }
+</div>

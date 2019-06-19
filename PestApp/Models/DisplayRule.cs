@@ -13,7 +13,7 @@ namespace PestApp.Models
         public RuleType RuleType { get; set; }
         public int Id { get; set; }
         public ICard Card { get; set; }
-        public string RuleTypeString { get; set; }
+        public string RuleTypeString { get { return RuleType.GetType().ToString(); } set { } }
         public int RuleAmount { get; set; }
 
         public DisplayRule (string ruleType)

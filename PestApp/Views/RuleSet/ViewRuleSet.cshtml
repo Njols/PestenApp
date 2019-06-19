@@ -1,12 +1,17 @@
 ﻿@using PestApp.Models;
+@using Enums;
 @{
     ViewData["Title"] = "ViewRuleSet";
 }
 @model RuleSetViewModel
 
 <h1>@Model.UserName</h1>
-<p>@Model.Name</p>
+<p>By @Model.Name</p>
 @foreach (DisplayRule rule in Model.DisplayRules)
 {
-    <p>@rule.Card.GetCard() @rule.RuleType.BasicDescription @rule.RuleAmount</p>
+    <p>@rule.Card.GetCard() @rule.RuleType.GetDisplayString()</p>
+}
+@foreach(additionalRule addRule in Model.ExtraRules)
+{
+    <p>@Html.DisplayFor(model => addRule)</p>
 }

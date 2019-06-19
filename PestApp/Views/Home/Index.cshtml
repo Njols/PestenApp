@@ -7,7 +7,7 @@
         <tr><th>Name</th><th>Username</th><th>Amount of Rules</th></tr>
         @foreach (SimpleRuleSetViewModel ruleSet in Model.AllRuleSets)
         {
-            <tr onclick="window.location='/RuleSet/ViewRuleSet?id=@ruleSet.RuleSetId'" style="cursor: pointer"><td>@ruleSet.Name</td><td> @ruleSet.Username</td> <td> @ruleSet.AmountOfRules </td></tr>
+            <tr class="clickabletr" onclick="window.location='/RuleSet/ViewRuleSet?id=@ruleSet.RuleSetId'" style="cursor: pointer"><td>@ruleSet.Name</td><td> @ruleSet.Username</td> <td> @ruleSet.AmountOfRules </td></tr>
         }
     </table>
 </div>

@@ -93,9 +93,9 @@ namespace PestApp.Controllers
             CreateRuleSetViewModel model = new CreateRuleSetViewModel
             {
                 DisplayRules = RuleList,
-                AdditionalRules = AdditionalRuleList
-            };
-            model.AdditionalRuleSelectList = new SelectList(Enum.GetNames(typeof(additionalRule)).Where(x => !AdditionalRuleList.Contains((additionalRule)Enum.Parse(typeof(additionalRule), x))));
+                AdditionalRules = AdditionalRuleList,
+                DropDownAddRules = Enum.GetValues(typeof(additionalRule)).Cast<additionalRule>().Where(x=>!AdditionalRuleList.Contains(x))
+            }
             return View(model);
         }
 
@@ -154,15 +154,23 @@ namespace PestApp.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                string email = User.Claims.First().Value;
-                List<DisplayRule> rules = RuleList;
-                //You can't loop through RuleList directly
-                List<IRule> ruleList = new List<IRule>();
-                foreach(DisplayRule rule in rules)
+                if (viewModel.Name != null)
                 {
-                    ruleList.Add(rule);
+                    string email = User.Claims.First().Value;
+                    List<DisplayRule> rules = RuleList;
+                    //You can't loop through RuleList directly
+                    List<IRule> ruleList = new List<IRule>();
+                    foreach (DisplayRule rule in rules)
+                    {
+                        ruleList.Add(rule);
+                    }
+                    _ruleSetLogic.TryToCreateRuleSet(ruleList, email, AdditionalRuleList, viewModel.Name);
                 }
-                _ruleSetLogic.TryToCreateRuleSet(ruleList, email, AdditionalRuleList, viewModel.Name);
+                else
+                {
+                    ViewData["Error"] = "Your ruleset needs a name.";
+                    return RedirectToAction("CreateRuleSet");
+                }
             }
             ViewData["Error"] = "You need to be logged in to create a ruleset.";
             return RedirectToAction("CreateRuleSet");

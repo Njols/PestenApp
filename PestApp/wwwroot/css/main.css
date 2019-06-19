@@ -5,3 +5,25 @@
     overflow: hidden;
     overflow-y: scroll;
 }
+#ruleSection {
+    width: 45%;
+    float:left;
+    height:500px;
+}
+#additionalRuleSection {
+    width:45%;
+    float:right;
+    height:500px;
+}
+.scrollableBox {
+    height: 250px;
+    width: 100%;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+.clickabletr :hover {
+    text-decoration:underline;
+}
+th, td {
+    padding:15px;
+}

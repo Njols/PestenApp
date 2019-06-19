@@ -45,7 +45,7 @@ namespace PestApp
             });
             services.AddAuthentication("loginAuth")
             .AddCookie("loginAuth", options => {
-                options.LoginPath = "/Home/CreateRuleSet/";
+                options.LoginPath = "/Home/Index/";
                 options.Cookie.Expiration = new TimeSpan(7, 0, 0, 0);
             });
 
@@ -89,7 +89,7 @@ namespace PestApp
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=LogIn}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

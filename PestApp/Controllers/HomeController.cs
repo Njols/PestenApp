@@ -108,7 +108,7 @@ namespace PestApp.Controllers
                     IsPersistent = true,
                     ExpiresUtc = DateTime.UtcNow.AddDays(7)
                 });
-                return RedirectToAction("CreateRuleSet");
+                return RedirectToAction("Index");
             }
             else
             {

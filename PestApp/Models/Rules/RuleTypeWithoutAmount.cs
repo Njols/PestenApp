@@ -11,5 +11,9 @@ namespace PestApp.Models
 
     public abstract class RuleTypeWithoutAmount : Rules.RuleType
     {
+        public override string GetDisplayString()
+        {
+            return DisplayString;
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace DataLibrary.DataAccess
             {
                 conn.Open();
                 cmd.Parameters.AddWithValue("@RuleSetId", ruleSetId);
-                cmd.Parameters.AddWithValue("@RuleType", additionalRuleId);
+                cmd.Parameters.AddWithValue("@AdditionalRuleId", additionalRuleId);
                 cmd.ExecuteScalar();
             }
         }
