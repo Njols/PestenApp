@@ -9,5 +9,6 @@ namespace PestApp.Models
     public class IndexViewModel
     {
         public List<SimpleRuleSetViewModel> AllRuleSets;
+        public List<SimpleRuleSetViewModel> RuleSetsByRuleAmount;
     }
 }

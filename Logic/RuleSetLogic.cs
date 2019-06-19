@@ -52,7 +52,7 @@ namespace Logic
         }
         public List<IRuleSet> GetRuleSets()
         {
-            List<IRuleSet> incompleteRuleSets = _ruleSetProcessor.GetRuleSets();
+            List<IRuleSet> incompleteRuleSets = _ruleSetProcessor.GetRuleSetsByUser();
             foreach(RuleSet ruleSet in incompleteRuleSets)
             {
                 ruleSet.Rules = _ruleProcessor.GetRulesByRuleSet(ruleSet.Id);
@@ -60,6 +60,7 @@ namespace Logic
             }
             return incompleteRuleSets;
         }
+
 
         public IRuleSet GetRuleSetById (int id)
         {

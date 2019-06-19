@@ -94,8 +94,8 @@ namespace PestApp.Controllers
             {
                 DisplayRules = RuleList,
                 AdditionalRules = AdditionalRuleList,
-                DropDownAddRules = Enum.GetValues(typeof(additionalRule)).Cast<additionalRule>().Where(x=>!AdditionalRuleList.Contains(x))
-            }
+                DropDownAddRules = Enum.GetValues(typeof(additionalRule)).Cast<additionalRule>().Where(x => !AdditionalRuleList.Contains(x))
+            };
             return View(model);
         }
 

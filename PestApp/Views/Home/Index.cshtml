@@ -1,13 +1,27 @@
 ﻿@using PestApp.Models
 @model IndexViewModel
 <span class="text-danger">@ViewData["Error"]</span>
-<h2>User-Created RuleSets</h2>
-<div style="height: 250px; width: 30%; overflow: hidden; overflow-y: scroll;">
-    <table>
-        <tr><th>Name</th><th>Username</th><th>Amount of Rules</th></tr>
-        @foreach (SimpleRuleSetViewModel ruleSet in Model.AllRuleSets)
-        {
-            <tr class="clickabletr" onclick="window.location='/RuleSet/ViewRuleSet?id=@ruleSet.RuleSetId'" style="cursor: pointer"><td>@ruleSet.Name</td><td> @ruleSet.Username</td> <td> @ruleSet.AmountOfRules </td></tr>
-        }
-    </table>
+<div>
+    <h2>All User-Created RuleSets</h2>
+    <div style="height: 250px; width: 30%; overflow: hidden; overflow-y: scroll;">
+        <table>
+            <tr><th>Name</th><th>Username</th><th>Amount of Rules</th></tr>
+            @foreach (SimpleRuleSetViewModel ruleSet in Model.AllRuleSets)
+            {
+                <tr class="clickabletr" onclick="window.location='/RuleSet/ViewRuleSet?id=@ruleSet.RuleSetId'" style="cursor: pointer"><td>@ruleSet.Name</td><td> @ruleSet.Username</td> <td> @ruleSet.AmountOfRules </td></tr>
+            }
+        </table>
+    </div>
+</div>
+<div>
+    <h2>Biggest RuleSets</h2>
+    <div style="height: 250px; width: 30%; overflow: hidden; overflow-y: scroll;">
+        <table>
+            <tr><th>Name</th><th>Username</th><th>Amount of Rules</th></tr>
+            @foreach (SimpleRuleSetViewModel ruleSet in Model.RuleSetsByRuleAmount)
+            {
+                <tr class="clickabletr" onclick="window.location='/RuleSet/ViewRuleSet?id=@ruleSet.RuleSetId'" style="cursor: pointer"><td>@ruleSet.Name</td><td> @ruleSet.Username</td> <td> @ruleSet.AmountOfRules </td></tr>
+            }
+        </table>
+    </div>
 </div>

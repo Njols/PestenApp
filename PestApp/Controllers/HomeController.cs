@@ -38,7 +38,19 @@ namespace PestApp.Controllers
                 };
                 ruleSetViewModels.Add(simpleRuleSet);
             }
-            return View(new IndexViewModel { AllRuleSets = ruleSetViewModels });
+            List<SimpleRuleSetViewModel> ruleSetsByAmountOfRules = new List<SimpleRuleSetViewModel>();
+            foreach(IRuleSet ruleSet in _ruleSetLogic.GetRuleSetsOrderedByRules())
+            {
+                SimpleRuleSetViewModel simpleRuleSet = new SimpleRuleSetViewModel
+                {
+                    Name = ruleSet.Name,
+                    Username = _userLogic.GetUserById(ruleSet.UserId).Username,
+                    AmountOfRules = ruleSet.Rules.Count,
+                    RuleSetId = ruleSet.Id
+                };
+                ruleSetsByAmountOfRules.Add(simpleRuleSet);
+            }
+            return View(new IndexViewModel { AllRuleSets = ruleSetViewModels, RuleSetsByRuleAmount = ruleSetsByAmountOfRules });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

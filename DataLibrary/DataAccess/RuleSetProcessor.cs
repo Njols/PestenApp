@@ -88,10 +88,11 @@ namespace DataLibrary.DataAccess
         }
         public List<IRuleSet> GetRuleSetsByAmountOfRules()
         {
-            string sql = @"SELECT * FROM [RuleSet] 
+            string sql = @"SELECT [RuleSet].[Name], [RuleSet].[Id], [UserId], COUNT([Rule].Id) AS NumberOfRules FROM [RuleSet] 
                            LEFT OUTER JOIN [Rule_RuleSet] ON [Rule_RuleSet].RuleSetId = [RuleSet].Id 
-                           INNER JOIN [Rule] ON [Rule].Id = [Rule_RuleSet].RuleId 
-                           ORDER BY COUNT([Rule].RuleId)";
+                           FULL OUTER JOIN [Rule] ON [Rule].Id = [Rule_RuleSet].RuleId 
+						   GROUP BY [RuleSet].[Name], [RuleSet].UserId, [RuleSet].Id
+                           ORDER BY COUNT([Rule].Id) DESC";
             List<IRuleSet> ruleSets = new List<IRuleSet>();
             using(SqlConnection conn = new SqlConnection(_connectionString))
             {
@@ -117,7 +118,7 @@ namespace DataLibrary.DataAccess
         public List<IRuleSet> GetRuleSetsByUser()
         {
             string sql = @"SELECT Name, Id, UserId FROM [RuleSet]
-                           GROUP BY UserId
+                           GROUP BY UserId, Name, Id
                            ORDER BY COUNT(*)";
             List<IRuleSet> ruleSets = new List<IRuleSet>();
             using(SqlConnection conn = new SqlConnection(_connectionString))
