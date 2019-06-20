@@ -24,6 +24,9 @@
 .clickabletr :hover {
     text-decoration:underline;
 }
+.clickabletr td{
+    padding:10px;
+}
 th, td {
     padding:15px;
 }

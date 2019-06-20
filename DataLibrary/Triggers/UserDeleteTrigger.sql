@@ -1,0 +1,9 @@
+﻿CREATE TRIGGER [UserDeleteTrigger]
+	ON [dbo].[User]
+	INSTEAD OF DELETE
+	AS
+	BEGIN
+		SET NOCOUNT ON
+		DELETE FROM RuleSet WHERE UserId = (SELECT Id FROM deleted)
+		DELETE FROM [User] WHERE Id = (SELECT Id FROM deleted)
+	END
