@@ -20,7 +20,7 @@ namespace UnitTests.Integration_tests
         public void CanLogOnWithCorrectInfo()
         {
             //arrange
-            string username = "testUsername";
+            string username = "test@mail.com";
             string password = "testPassword";
             //act
             bool passwordMatches = _userLogic.PasswordMatches(username, password);
@@ -31,7 +31,7 @@ namespace UnitTests.Integration_tests
         public void CannotLoginWithIncorrectInfo ()
         {
             //arrange
-            string username = "wrongUsername";
+            string username = "wrong@mail.com";
             string password = "wrongPassword";
             //act
             bool passwordMatches = _userLogic.PasswordMatches(username, password);
